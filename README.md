@@ -1,4 +1,4 @@
-# prototype
+# COVID - Finance
 
 ## Project setup
 
