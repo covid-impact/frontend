@@ -1,6 +1,8 @@
 <template>
     <div class="app">
+
         <h1 class="heading">Comparing USA covid cases to CCL</h1>
+        <Search/>
         <Chart title="COVID Data" :data="dataCovid" :options="options" />
         <Chart title="Stock Data" :data="dataStock" :options="options" />
     </div>
@@ -8,11 +10,13 @@
 
 <script>
 import Chart from "./components/Chart";
+import Search from "./components/Search";
 
 export default {
     name: "App",
     components: {
         Chart,
+        Search,
     },
     data: function () {
         return {
