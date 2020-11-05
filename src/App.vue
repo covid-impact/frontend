@@ -1,8 +1,55 @@
 <template>
     <div class="app">
-        <h1 class="heading">Comparing USA covid cases to CCL</h1>
-        <Chart title="COVID Data" :data="dataCovid" :options="options" />
-        <Chart title="Stock Data" :data="dataStock" :options="options" />
+        <nav class="main--menu">
+            <h1 class="logo">COVIDF</h1>
+            <ul class="menu">
+                <li class="menu--item">COVID</li>
+                <li class="menu--item">Finance</li>
+            </ul>
+        </nav>
+        <section class="main">
+            <h1 class="heading">Canada</h1>
+            <ul class="info--list">
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+                <li class="info--list--item cases">
+                    <h3 class="info--list--item--head">Cases</h3>
+                    <span class="info--list--item--number">100,000</span>
+                </li>
+            </ul>
+            <Chart
+                title="COVID Data for Canada"
+                :data="dataCovid"
+                :options="options"
+            />
+            <!-- <Chart title="Stock Data" :data="dataStock" :options="options" /> -->
+        </section>
     </div>
 </template>
 
@@ -22,7 +69,7 @@ export default {
                 maintainAspectRatio: false,
                 elements: {
                     point: {
-                        radius: 0,
+                        radius: 1.5,
                     },
                 },
                 scales: {
@@ -40,7 +87,7 @@ export default {
     methods: {
         getData: async function () {
             const response = await fetch(
-                "https://disease.sh/v3/covid-19/historical/US?lastdays=365"
+                "https://disease.sh/v3/covid-19/historical/Canada?lastdays=365"
             );
             const dataJSON = await response.json();
 
@@ -143,6 +190,7 @@ export default {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 
 html,
@@ -158,15 +206,100 @@ body {
 }
 
 .app {
-    width: 80vw;
-    height: 80vh;
+    width: 100vw;
+    height: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    grid-template-rows: 1fr;
+    grid-template-areas: "menu main";
+}
+
+.main--menu {
+    width: 100%;
+    padding: 20px 15px;
+    grid-area: menu;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.logo {
+    font-size: 3em;
+}
+
+.menu {
+    width: 100%;
+    list-style-type: none;
+}
+
+.menu--item {
+    width: 100%;
+    border: 2px solid black;
+    font-size: 1.5em;
+    margin: 5px;
+    padding: 5px;
+}
+
+.main {
+    grid-area: main;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .heading {
-    align-self: flex-start;
+    font-size: 2.5em;
+    justify-self: flex-start;
+}
+
+.info--list {
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 20px 0px;
+}
+
+.info--list--item {
+    padding: 10px;
+    width: 22%;
+    margin: 5px;
+    border: 2px solid black;
+}
+
+.info--list--item--head {
+    font-size: 2em;
+}
+
+.info--list--item--number {
+    font-size: 3em;
+}
+
+@media (max-width: 575.98px) {
+    .app {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 15% 85%;
+        grid-template-areas:
+            "menu"
+            "main";
+    }
+
+    .info--list--item {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767.98px) {
+}
+
+@media (max-width: 991.98px) {
+}
+
+@media (max-width: 1199.98px) {
 }
 </style>
