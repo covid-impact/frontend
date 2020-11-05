@@ -17,7 +17,7 @@ export default {
     name: "App",
     components: {
         Chart,
-
+        
     },
     data: function () {
         return {
@@ -154,6 +154,10 @@ export default {
           };
           this.dataStock = dataStock;
         },
+        //function getting country from stock company using Stock API(iex)
+        //input - companyName, String, name of stock
+        //log company country as well
+        //return - comapny country
         getCountryFromCompany: async function(companyName){
 
           const responseFinance = await fetch(
