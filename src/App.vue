@@ -2,7 +2,6 @@
     <div class="app">
 
         <h1 class="heading">Comparing USA covid cases to CCL</h1>
-        <!--Search/-->
         <input type="text" v-model="searchInput" placeholder="Enter location/ company name" />
         <button v-on:click="submitSearchCompany()">Search company</button>
         <button v-on:click="submitSearchLocation()">Search location</button>
@@ -13,22 +12,24 @@
 
 <script>
 import Chart from "./components/Chart";
-//import Search from "./components/Search";
-//import CovidData from "./components/CovidData";
-//import StockData from "./components/StockData";
 
 export default {
     name: "App",
     components: {
         Chart,
-        //Search,
+
     },
     data: function () {
         return {
+            //data for creating the covid chart
             dataCovid: {},
+            //data for creating the stock chart
             dataStock: {},
+            //search input from user
             searchInput: '',
+            //dates to be used in both charts
             dates:{},
+            //options for chart
             options: {
                 maintainAspectRatio: false,
                 elements: {
@@ -49,6 +50,10 @@ export default {
         };
     },
     methods: {
+        //function  for using covid API(disease.sh)
+        //input - location, string, country
+        //this.covidData = data from Covid api
+        //return dates(dataCovid.labels)
         getCovidData: async function(location){
           console.log("searching for location "+ location);
           const response = await fetch(
@@ -90,6 +95,11 @@ export default {
           this.dataCovid = dataCovid;
           return dates;
         },
+        //function for using Stock API(iex)
+        //input - stockName, string, name of stock
+        //input - dates - labels = dates to be used in chart
+        //this.stockData = data from Stock api
+        //no return
         getStockData: async function(stockName, dates){
           console.log("searching for stock "+ stockName);
           const responseFinance = await fetch(
@@ -153,19 +163,29 @@ export default {
           console.log(companyName+" is located in "+dataFinance.country);
           return dataFinance.country;
         },
+        //function for searching location
+        //trigger by button click
+        //directly call geCovidData()
+        //no return
         submitSearchLocation: async function(){
-
           //covid
-
           this.getCovidData(this.searchInput)
-          //return dataJSON;
         },
+        //function for searching stock company
+        //trigger by button click
+        //first get country of the stock
+        //then call getCovidData() of the country
+        //call getStockData() as well
         submitSearchCompany: async function(){
           //finance
           var country = await this.getCountryFromCompany(this.searchInput);
           let dates = await this.getCovidData(country);
           this.getStockData(this.searchInput, dates);
         },
+        //function for first load
+        //default is 'CCL' stock company and 'US' country
+        //call getCovidData() and  getStockData()
+        //assign values to this.stockData, this.covidData and this.dates
         getData: async function () {
             let dates = [];
             dates = await this.getCovidData('US');
