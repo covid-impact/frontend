@@ -1,5 +1,5 @@
 <template>
-    <h1>Finance</h1>
+    <h1 class="main--heading">Finance</h1>
 </template>
 
 <script>

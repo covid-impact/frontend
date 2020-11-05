@@ -1,13 +1,13 @@
 <template>
     <nav class="main--menu">
-        <h1 class="logo">COVIDF</h1>
+        <h1 class="logo">CF</h1>
         <ul class="menu">
-            <li class="menu--item">
-                <router-link to="/">COVID</router-link>
-            </li>
-            <li class="menu--item">
-                <router-link to="/finance">Finance</router-link>
-            </li>
+            <router-link tag="li" class="menu--item" :to="{ name: 'home' }"
+                >COVID</router-link
+            >
+            <router-link tag="li" class="menu--item" :to="{ name: 'finance' }"
+                >Finance</router-link
+            >
         </ul>
     </nav>
 </template>
@@ -25,6 +25,8 @@ export default {};
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    background: var(--background-secondary);
+    color: var(--text-menu);
 }
 
 .logo {
@@ -36,13 +38,19 @@ export default {};
     list-style-type: none;
 }
 
+.router-link-exact-active {
+    background: var(--text-menu);
+    color: var(--background);
+}
+
 .menu--item {
     width: 100%;
-    border: 2px solid var(--text);
+    border: 2px solid var(--text-menu);
     font-size: 1.5em;
-    margin: 5px;
+    margin: 10px 0;
     padding: 5px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 @media (max-width: 575.98px) {

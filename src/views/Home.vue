@@ -1,6 +1,7 @@
 <template>
     <section>
-        <h1 class="heading">Canada</h1>
+        <h1 class="main--heading">COVID-19 Data</h1>
+        <h2 class="heading">Canada</h2>
         <ul class="info--list">
             <li class="info--list--item cases">
                 <h3 class="info--list--item--head">Cases</h3>
@@ -55,10 +56,20 @@ export default {
             dataCovid: {},
             dataStock: {},
             options: {
+                plugins: {
+                    colorschemes: {
+                        scheme: "brewer.RdYlGn8",
+                    },
+                },
                 maintainAspectRatio: false,
                 elements: {
                     point: {
                         radius: 1.5,
+                    },
+                },
+                legend: {
+                    labels: {
+                        fontColor: "black",
                     },
                 },
                 scales: {
@@ -66,6 +77,14 @@ export default {
                         {
                             ticks: {
                                 beginAtZero: true,
+                                fontColor: "black",
+                            },
+                        },
+                    ],
+                    xAxes: [
+                        {
+                            ticks: {
+                                fontColor: "black",
                             },
                         },
                     ],
@@ -99,14 +118,14 @@ export default {
                         label: "Deaths",
                         data: deaths,
                         borderWidth: 1,
-                        borderColor: "red",
+                        borderColor: "rgb(244, 67, 54)",
                         backgroundColor: "transparent",
                     },
                     {
                         label: "Recovered",
                         data: recovered,
                         borderWidth: 1,
-                        borderColor: "green",
+                        borderColor: "rgb(118, 255, 3)",
                         backgroundColor: "transparent",
                     },
                 ],
@@ -175,6 +194,10 @@ export default {
 </script>
 
 <style>
+.main--heading {
+    font-size: 3em;
+}
+
 .heading {
     font-size: 2.5em;
     justify-self: flex-start;

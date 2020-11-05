@@ -2,7 +2,9 @@
     <div class="app">
         <Menu />
         <section class="main">
-            <router-view></router-view>
+            <transition name="slide-fade" mode="out-in">
+                <router-view :key="$route.path" />
+            </transition>
         </section>
     </div>
 </template>
@@ -20,11 +22,25 @@ export default {
 <style>
 :root {
     --background: #101010;
+    --background-secondary: #000;
     --text: #fff;
+    --text-menu: #fff;
     --deaths: rgb(244, 67, 54);
     --active: rgb(255, 235, 59);
     --recovered: rgb(118, 255, 3);
     --cases: #dadada;
+    --critical: rgb(255, 23, 68);
+}
+
+:root {
+    --background: #fff;
+    --background-secondary: rgb(220, 226, 255);
+    --text: #000;
+    --text-menu: #000;
+    --deaths: rgb(244, 67, 54);
+    --active: rgb(255, 235, 59);
+    --recovered: rgb(118, 255, 3);
+    --cases: #000;
     --critical: rgb(255, 23, 68);
 }
 
@@ -49,12 +65,22 @@ body {
     align-items: center;
 }
 
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all 0.3s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
+}
+
 .app {
     width: 100vw;
     height: 100%;
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 15% 85%;
+    grid-template-columns: 10% 90%;
     grid-template-rows: 1fr;
     grid-template-areas: "menu main";
 }
