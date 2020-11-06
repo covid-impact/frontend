@@ -1,9 +1,24 @@
 <template>
     <div class="app">
-        <Menu />
+        <section class="logo">
+            <router-link
+                :to="{ name: 'home' }"
+                v-slot="{ href, navigate, isActive, isExactActive }"
+            >
+                <a
+                    :class="[isActive && '', isExactActive && '']"
+                    :href="href"
+                    @click="navigate"
+                >
+                    <h1>CF</h1></a
+                >
+            </router-link>
+        </section>
+        <Menu @themeChange="themeChange" />
+        <section class="search-bar"></section>
         <section class="main">
-            <transition name="slide-fade" mode="out-in">
-                <router-view :key="$route.path" />
+            <transition name="slide-down" mode="out-in">
+                <router-view :theme="theme" :key="$route.path" />
             </transition>
         </section>
     </div>
@@ -13,14 +28,31 @@
 import Menu from "./components/Menu";
 export default {
     name: "App",
+    data: function () {
+        return {
+            theme: "light",
+        };
+    },
     components: {
         Menu,
+    },
+    methods: {
+        themeChange: function (theme) {
+            this.theme = theme;
+        },
+    },
+    mounted: function () {
+        const html = document.querySelector("html");
+        html.setAttribute(
+            "data-theme",
+            localStorage.getItem("theme") || "light"
+        );
     },
 };
 </script>
 
 <style>
-:root {
+html[data-theme="dark"] {
     --background: #101010;
     --background-secondary: #000;
     --text: #fff;
@@ -32,7 +64,7 @@ export default {
     --critical: rgb(255, 23, 68);
 }
 
-:root {
+html[data-theme="light"] {
     --background: #fff;
     --background-secondary: rgb(220, 226, 255);
     --text: #000;
@@ -56,6 +88,7 @@ body {
     min-height: 100vh;
     background: var(--background);
     color: var(--text);
+    /* overflow-x: hidden; */
 }
 
 body {
@@ -71,7 +104,17 @@ body {
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateX(10px);
+    transform: translateY(-30px);
+    opacity: 0;
+}
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+    transition: all 0.3s ease;
+}
+.slide-down-enter, .slide-down-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateY(-30px);
     opacity: 0;
 }
 
@@ -80,14 +123,30 @@ body {
     height: 100%;
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 10% 90%;
-    grid-template-rows: 1fr;
-    grid-template-areas: "menu main";
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: 100px 1fr;
+    grid-template-areas:
+        "logo search"
+        "menu main";
+}
+
+.logo {
+    font-size: 3em;
+    grid-area: logo;
+    padding: 20px 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: var(--background-secondary);
+}
+
+.search-bar {
+    grid-area: search;
 }
 
 .main {
     grid-area: main;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -97,11 +156,16 @@ body {
 @media (max-width: 575.98px) {
     .app {
         display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 15% 85%;
+        grid-template-columns: max-content 1fr;
+        grid-template-rows: max-content max-content 1fr;
         grid-template-areas:
-            "menu"
-            "main";
+            "logo menu"
+            "serach search"
+            "main main";
+    }
+
+    .logo {
+        font-size: 2.3em;
     }
 }
 

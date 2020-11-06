@@ -1,43 +1,65 @@
 <template>
-    <section>
+    <section class="home">
         <h1 class="main--heading">COVID-19 Data</h1>
-        <h2 class="heading">Canada</h2>
+        <section class="country">
+            <h2 class="heading">{{ country.name }}</h2>
+            <Select @conutryChange="countryChange" />
+        </section>
+
         <ul class="info--list">
             <li class="info--list--item cases">
                 <h3 class="info--list--item--head">Cases</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.cases
+                }}</span>
             </li>
             <li class="info--list--item cases">
                 <h3 class="info--list--item--head">Cases Today</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.todayCases
+                }}</span>
             </li>
             <li class="info--list--item cases">
                 <h3 class="info--list--item--head">Tests Coducted</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.tests
+                }}</span>
             </li>
             <li class="info--list--item deaths">
                 <h3 class="info--list--item--head">Deaths</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.deaths
+                }}</span>
             </li>
             <li class="info--list--item deaths">
                 <h3 class="info--list--item--head">Deaths Today</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.todayDeaths
+                }}</span>
             </li>
             <li class="info--list--item active">
                 <h3 class="info--list--item--head">Active</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.active
+                }}</span>
             </li>
             <li class="info--list--item recovered">
                 <h3 class="info--list--item--head">Recovered</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.recovered
+                }}</span>
             </li>
             <li class="info--list--item critical">
                 <h3 class="info--list--item--head">Critical</h3>
-                <span class="info--list--item--number">100,000</span>
+                <span class="info--list--item--number">{{
+                    countryCOVIDData.critical
+                }}</span>
             </li>
         </ul>
+        <h1 v-if="historyDataCovidError">No historical data found</h1>
         <Chart
-            title="COVID Data for Canada"
+            v-else
+            :title="`COVID Data for ${country.name}`"
             :data="dataCovid"
             :options="options"
         />
@@ -47,153 +69,192 @@
 
 <script>
 import Chart from "../components/Chart";
+import Select from "../components/Select";
+import options from "@/assets/chartOptions.js";
+
 export default {
     components: {
         Chart,
+        Select,
+    },
+    props: {
+        theme: String,
     },
     data: function () {
         return {
             dataCovid: {},
+            historyDataCovidError: false,
             dataStock: {},
-            options: {
-                plugins: {
-                    colorschemes: {
-                        scheme: "brewer.RdYlGn8",
-                    },
+            options: options[localStorage.getItem("theme") || "light"],
+            country: JSON.parse(localStorage.getItem("country")) || {
+                code: "CA",
+                code3: "CAN",
+                name: "Canada",
+                number: "124",
+            },
+            countryCOVIDData: {
+                updated: 1604676052089,
+                country: "Canada",
+                countryInfo: {
+                    _id: 124,
+                    iso2: "CA",
+                    iso3: "CAN",
+                    lat: 60,
+                    long: -95,
+                    flag: "https://disease.sh/assets/img/flags/ca.png",
                 },
-                maintainAspectRatio: false,
-                elements: {
-                    point: {
-                        radius: 1.5,
-                    },
-                },
-                legend: {
-                    labels: {
-                        fontColor: "black",
-                    },
-                },
-                scales: {
-                    yAxes: [
-                        {
-                            ticks: {
-                                beginAtZero: true,
-                                fontColor: "black",
-                            },
-                        },
-                    ],
-                    xAxes: [
-                        {
-                            ticks: {
-                                fontColor: "black",
-                            },
-                        },
-                    ],
-                },
+                cases: 251338,
+                todayCases: 0,
+                deaths: 10381,
+                todayDeaths: 0,
+                recovered: 207998,
+                todayRecovered: 0,
+                active: 32959,
+                critical: 234,
+                casesPerOneMillion: 6639,
+                deathsPerOneMillion: 274,
+                tests: 9763591,
+                testsPerOneMillion: 257906,
+                population: 37857209,
+                continent: "North America",
+                oneCasePerPeople: 151,
+                oneDeathPerPeople: 3647,
+                oneTestPerPeople: 4,
+                activePerOneMillion: 870.61,
+                recoveredPerOneMillion: 5494.28,
+                criticalPerOneMillion: 6.18,
             },
         };
     },
     methods: {
         getData: async function () {
-            const response = await fetch(
-                "https://disease.sh/v3/covid-19/historical/Canada?lastdays=365"
-            );
-            const dataJSON = await response.json();
+            try {
+                this.historyDataCovidError = false;
+                const response = await fetch(
+                    `https://disease.sh/v3/covid-19/historical/${this.country.code}?lastdays=365`
+                );
+                const dataJSON = await response.json();
 
-            let dates = Object.keys(dataJSON.timeline.cases);
-            let cases = Object.values(dataJSON.timeline.cases);
-            let deaths = Object.values(dataJSON.timeline.deaths);
-            let recovered = Object.values(dataJSON.timeline.recovered);
+                let dates = Object.keys(dataJSON.timeline.cases);
+                let cases = Object.values(dataJSON.timeline.cases);
+                let deaths = Object.values(dataJSON.timeline.deaths);
+                let recovered = Object.values(dataJSON.timeline.recovered);
 
-            const dataCovid = {
-                labels: dates,
-                datasets: [
-                    {
-                        label: "Cases",
-                        data: cases,
-                        borderWidth: 1,
-                        borderColor: "gray",
-                        backgroundColor: "transparent",
-                    },
-                    {
-                        label: "Deaths",
-                        data: deaths,
-                        borderWidth: 1,
-                        borderColor: "rgb(244, 67, 54)",
-                        backgroundColor: "transparent",
-                    },
-                    {
-                        label: "Recovered",
-                        data: recovered,
-                        borderWidth: 1,
-                        borderColor: "rgb(118, 255, 3)",
-                        backgroundColor: "transparent",
-                    },
-                ],
-            };
+                const dataCovid = {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: "Cases",
+                            data: cases,
+                            borderWidth: 1,
+                            borderColor: "gray",
+                            backgroundColor: "transparent",
+                        },
+                        {
+                            label: "Deaths",
+                            data: deaths,
+                            borderWidth: 1,
+                            borderColor: "rgb(244, 67, 54)",
+                            backgroundColor: "transparent",
+                        },
+                        {
+                            label: "Recovered",
+                            data: recovered,
+                            borderWidth: 1,
+                            borderColor: "rgb(118, 255, 3)",
+                            backgroundColor: "transparent",
+                        },
+                    ],
+                };
 
-            this.dataCovid = dataCovid;
+                this.dataCovid = dataCovid;
+            } catch (error) {
+                this.historyDataCovidError = true;
+            }
 
-            const responseFinance = await fetch(
-                "https://sandbox.iexapis.com/stable/stock/CCL/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
-            );
-            const dataFinance = await responseFinance.json();
+            // const responseFinance = await fetch(
+            //     "https://sandbox.iexapis.com/stable/stock/CCL/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
+            // );
+            // const dataFinance = await responseFinance.json();
 
-            let close = [];
-            let open = [];
-            let high = [];
-            let low = [];
+            // let close = [];
+            // let open = [];
+            // let high = [];
+            // let low = [];
 
-            dataFinance.forEach((element) => {
-                close.push(element.close);
-                open.push(element.open);
-                high.push(element.high);
-                low.push(element.low);
-            });
+            // dataFinance.forEach((element) => {
+            //     close.push(element.close);
+            //     open.push(element.open);
+            //     high.push(element.high);
+            //     low.push(element.low);
+            // });
 
-            const dataStock = {
-                labels: dates,
-                datasets: [
-                    {
-                        label: "Open",
-                        data: open,
-                        borderWidth: 1,
-                        borderColor: "green",
-                        backgroundColor: "transparent",
-                    },
-                    {
-                        label: "Close",
-                        data: close,
-                        borderWidth: 1,
-                        borderColor: "blue",
-                        backgroundColor: "transparent",
-                    },
-                    {
-                        label: "High",
-                        data: high,
-                        borderWidth: 1,
-                        borderColor: "yellow",
-                        backgroundColor: "transparent",
-                    },
-                    {
-                        label: "Low",
-                        data: low,
-                        borderWidth: 1,
-                        borderColor: "red",
-                        backgroundColor: "transparent",
-                    },
-                ],
-            };
+            // const dataStock = {
+            //     labels: dates,
+            //     datasets: [
+            //         {
+            //             label: "Open",
+            //             data: open,
+            //             borderWidth: 1,
+            //             borderColor: "green",
+            //             backgroundColor: "transparent",
+            //         },
+            //         {
+            //             label: "Close",
+            //             data: close,
+            //             borderWidth: 1,
+            //             borderColor: "blue",
+            //             backgroundColor: "transparent",
+            //         },
+            //         {
+            //             label: "High",
+            //             data: high,
+            //             borderWidth: 1,
+            //             borderColor: "yellow",
+            //             backgroundColor: "transparent",
+            //         },
+            //         {
+            //             label: "Low",
+            //             data: low,
+            //             borderWidth: 1,
+            //             borderColor: "red",
+            //             backgroundColor: "transparent",
+            //         },
+            //     ],
+            // };
 
-            this.dataStock = dataStock;
+            // this.dataStock = dataStock;
+        },
+        countryChange: function (country) {
+            this.country = country;
+            localStorage.setItem("country", JSON.stringify(country));
+            this.getConutryData();
+            this.getData();
+        },
+        getConutryData: async function () {
+            const url = `https://disease.sh/v3/covid-19/countries/${this.country.code3}?strict=true`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            this.countryCOVIDData = data;
         },
     },
     mounted() {
         this.getData();
     },
+    watch: {
+        theme: function (newTheme) {
+            this.options = options[newTheme];
+        },
+    },
 };
 </script>
 
 <style>
+.home {
+    width: 100%;
+}
+
 .main--heading {
     font-size: 3em;
 }
@@ -201,6 +262,12 @@ export default {
 .heading {
     font-size: 2.5em;
     justify-self: flex-start;
+}
+
+.country {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .info--list {
@@ -216,6 +283,10 @@ export default {
     width: 22%;
     margin: 5px;
     border-radius: 10px;
+    background: var(--background);
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
+    margin: 10px;
 }
 
 .cases {
@@ -254,6 +325,26 @@ export default {
 @media (max-width: 575.98px) {
     .info--list--item {
         width: 100%;
+    }
+
+    .country {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .heading {
+        margin-top: 10px;
+    }
+
+    .info--list--item:first-of-type {
+        margin-top: 0;
+    }
+
+    .info--list--item {
+        margin: 0;
+        margin-top: 15px;
     }
 }
 
