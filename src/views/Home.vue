@@ -283,7 +283,7 @@ export default {
     width: 22%;
     margin: 5px;
     border-radius: 10px;
-    background: var(--background);
+    background: var(--background-card);
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
     margin: 10px;
@@ -322,6 +322,32 @@ export default {
     font-size: 3em;
 }
 
+@media (max-width: 1199.98px) {
+}
+
+@media (max-width: 991.98px) {
+    .country {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info--list--item {
+        width: 45%;
+    }
+
+    .heading {
+        margin-top: 10px;
+    }
+
+    .info--list {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 767.98px) {
+}
+
 @media (max-width: 575.98px) {
     .info--list--item {
         width: 100%;
@@ -346,14 +372,5 @@ export default {
         margin: 0;
         margin-top: 15px;
     }
-}
-
-@media (max-width: 767.98px) {
-}
-
-@media (max-width: 991.98px) {
-}
-
-@media (max-width: 1199.98px) {
 }
 </style>

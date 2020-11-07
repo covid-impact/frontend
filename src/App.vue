@@ -6,7 +6,7 @@
                 v-slot="{ href, navigate, isActive, isExactActive }"
             >
                 <a
-                    :class="[isActive && '', isExactActive && '']"
+                    :class="[isActive && '', isExactActive && '', 'logo--link']"
                     :href="href"
                     @click="navigate"
                 >
@@ -53,8 +53,9 @@ export default {
 
 <style>
 html[data-theme="dark"] {
-    --background: #101010;
-    --background-secondary: #000;
+    --background: #303030;
+    --background-secondary: #101010;
+    --background-card: #000;
     --text: #fff;
     --text-menu: #fff;
     --deaths: rgb(244, 67, 54);
@@ -67,6 +68,7 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
     --background: #fff;
     --background-secondary: rgb(220, 226, 255);
+    --card-bg: #fff;
     --text: #000;
     --text-menu: #000;
     --deaths: rgb(244, 67, 54);
@@ -123,7 +125,7 @@ body {
     height: 100%;
     min-height: 100vh;
     display: grid;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: 10% 90%;
     grid-template-rows: 100px 1fr;
     grid-template-areas:
         "logo search"
@@ -140,6 +142,14 @@ body {
     background: var(--background-secondary);
 }
 
+.logo--link,
+.logo--link:active,
+.logo--link:visited,
+.logo--link:hover {
+    color: var(--text-menu);
+    text-decoration: none;
+}
+
 .search-bar {
     grid-area: search;
 }
@@ -153,7 +163,10 @@ body {
     align-items: flex-start;
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 1199.98px) {
+}
+
+@media (max-width: 991.98px) {
     .app {
         display: grid;
         grid-template-columns: max-content 1fr;
@@ -172,9 +185,19 @@ body {
 @media (max-width: 767.98px) {
 }
 
-@media (max-width: 991.98px) {
-}
+@media (max-width: 575.98px) {
+    .app {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        grid-template-rows: max-content max-content 1fr;
+        grid-template-areas:
+            "logo menu"
+            "serach search"
+            "main main";
+    }
 
-@media (max-width: 1199.98px) {
+    .logo {
+        font-size: 2.3em;
+    }
 }
 </style>

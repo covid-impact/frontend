@@ -23,14 +23,23 @@
             <router-link tag="li" class="menu--item" :to="{ name: 'finance' }"
                 >Finance</router-link
             >
-            <li>
-                <label for="checkbox">Light Theme</label>
-                <input
-                    @click="themeSwitch"
-                    type="checkbox"
-                    id="checkbox"
-                    v-model="themeLight"
-                />
+            <li class="menu--item--theme">
+                <div class="theme--switch">
+                    <h3>Light</h3>
+                    <div class="theme--switch--toggle">
+                        <input
+                            @click="themeSwitch"
+                            v-model="themeLight"
+                            id="check"
+                            aria-label="Switch themes"
+                            type="checkbox"
+                            name="theme--switcher"
+                            class="theme--check--switch"
+                        />
+                        <span class="theme--switch--ball"></span>
+                    </div>
+                    <h3>Dark</h3>
+                </div>
             </li>
         </ul>
         <transition name="slide-fade" mode="out-in">
@@ -44,14 +53,23 @@
                     :to="{ name: 'finance' }"
                     >Finance</router-link
                 >
-                <li>
-                    <label for="checkbox">Light Theme</label>
-                    <input
-                        @click="themeSwitch"
-                        type="checkbox"
-                        id="checkbox"
-                        v-model="themeLight"
-                    />
+                <li class="menu--item--theme">
+                    <div class="theme--switch">
+                        <h3>Light</h3>
+                        <div class="theme--switch--toggle">
+                            <input
+                                @click="themeSwitch"
+                                v-model="themeLight"
+                                id="check"
+                                aria-label="Switch themes"
+                                type="checkbox"
+                                name="theme--switcher"
+                                class="theme--check--switch"
+                            />
+                            <span class="theme--switch--ball"></span>
+                        </div>
+                        <h3>Dark</h3>
+                    </div>
                 </li>
             </ul>
         </transition>
@@ -113,6 +131,9 @@ export default {
 
 .menu {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     list-style-type: none;
 }
 
@@ -139,6 +160,98 @@ export default {
     cursor: pointer;
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
+}
+
+.menu--item--theme {
+    margin-top: auto;
+}
+
+.theme--switch {
+    display: flex;
+    align-items: center;
+}
+
+.theme--switch--toggle {
+    position: relative;
+    background: var(--text);
+    padding: 5px;
+    height: max-content;
+    width: 40px;
+    border-radius: 100px;
+    margin-right: 10px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    transition: 0.5s background;
+}
+
+.theme--check--switch {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.theme--switch--ball {
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--background);
+    transition: 0.5s transform;
+}
+
+.theme--check--switch:checked ~ .theme--switch--ball {
+    transform: translateX(15px);
+}
+
+@media (max-width: 1199.98px) {
+}
+
+@media (max-width: 991.98px) {
+    .main--menu {
+        justify-content: center;
+        align-items: flex-end;
+        padding: 10px;
+        position: relative;
+    }
+
+    .menu--btn {
+        display: block;
+        width: max-content;
+        height: 50px;
+        width: 50px;
+    }
+
+    .menu {
+        display: none;
+    }
+
+    .menu--mobile {
+        display: block;
+        position: absolute;
+        top: 100%;
+        width: 100vw;
+        right: 0;
+        padding: 10px;
+        background: var(--background-secondary);
+        height: max-content;
+        z-index: 1;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    .menu--item {
+        width: 90%;
+    }
+}
+
+@media (max-width: 767.98px) {
 }
 
 @media (max-width: 575.98px) {
@@ -168,19 +281,14 @@ export default {
         right: 0;
         padding: 10px;
         background: var(--background-secondary);
+        height: max-content;
+        z-index: 1;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
     }
 
     .menu--item {
         width: 90%;
     }
-}
-
-@media (max-width: 767.98px) {
-}
-
-@media (max-width: 991.98px) {
-}
-
-@media (max-width: 1199.98px) {
 }
 </style>

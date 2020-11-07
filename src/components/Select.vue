@@ -131,10 +131,13 @@ export default {
     border-bottom: 1px solid var(--text);
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 1199.98px) {
+}
+
+@media (max-width: 991.98px) {
     .select {
         margin-top: 10px;
-        width: 100%;
+        width: 50%;
     }
 
     .selected {
@@ -145,9 +148,14 @@ export default {
 @media (max-width: 767.98px) {
 }
 
-@media (max-width: 991.98px) {
-}
+@media (max-width: 575.98px) {
+    .select {
+        margin-top: 10px;
+        width: 100%;
+    }
 
-@media (max-width: 1199.98px) {
+    .selected {
+        width: 100%;
+    }
 }
 </style>
