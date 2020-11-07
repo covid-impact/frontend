@@ -2,9 +2,7 @@
     <div class="app">
 
         <h1 class="heading">Comparing USA covid cases to CCL</h1>
-        <input type="text" v-model="searchInput" placeholder="Enter location/ company name" />
-        <button v-on:click="submitSearchCompany()">Search company</button>
-        <button v-on:click="submitSearchLocation()">Search location</button>
+        <Search v-on:searchWithInput="search" ></Search>
         <Chart title="COVID Data" :data="dataCovid" :options="options" />
         <Chart title="Stock Data" :data="dataStock" :options="options" />
     </div>
@@ -12,12 +10,12 @@
 
 <script>
 import Chart from "./components/Chart";
-
+import Search from "./components/Search";
 export default {
     name: "App",
     components: {
         Chart,
-        
+        Search,
     },
     data: function () {
         return {
@@ -94,6 +92,18 @@ export default {
           };
           this.dataCovid = dataCovid;
           return dates;
+        },
+        search(input){
+          //stock
+          //this.searchInput = input;
+          //this.submitSearchCompany()
+
+          //covid
+          //this.searchInput = input;
+          //this.submitSearchLocation()
+
+          //log
+          console.log(input);
         },
         //function for using Stock API(iex)
         //input - stockName, string, name of stock
