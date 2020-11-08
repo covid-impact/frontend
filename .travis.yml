@@ -6,3 +6,8 @@ cache:
     - node_modules
 script:
     - npm run test:unit
+deploy:
+  provider: netlify
+  site: NETLIFY_SITE
+  auth: NETLIFY_AUTH
+  edge: true
