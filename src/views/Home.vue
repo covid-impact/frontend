@@ -3,7 +3,7 @@
         <h1 class="main--heading">COVID-19 Data</h1>
         <section class="country">
             <h2 class="heading">{{ country.name }}</h2>
-            <Select @conutryChange="countryChange" />
+            <Select :countries="countries" @conutryChange="countryChange" />
         </section>
 
         <ul class="info--list">
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import countries from "@/assets/countries";
 import Chart from "../components/Chart";
 import Select from "../components/Select";
 import options from "@/assets/chartOptions.js";
@@ -82,10 +83,11 @@ export default {
     },
     props: {
         // The theme for the page
-        theme: { type: String, required: true, default: "light" },
+        theme: { type: String, required: false, default: "light" },
     },
     data: function () {
         return {
+            countries,
             dataCovid: {},
             historyDataCovidError: false,
             dataStock: {},
