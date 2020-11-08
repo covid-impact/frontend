@@ -1,4 +1,5 @@
 # COVID - Finance
+[![Build Status](https://travis-ci.org/covid-impact/frontend.svg?branch=main)](https://travis-ci.org/covid-impact/frontend)
 
 ## COMP8117-1-R-2020F-a Advanced Software Eng. Topics
 
