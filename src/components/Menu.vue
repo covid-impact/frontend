@@ -77,6 +77,10 @@
 </template>
 
 <script>
+// @group Components
+/**
+ * Menu for the page
+ */
 export default {
     data: function () {
         return {
@@ -85,9 +89,17 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Toggles menu. For tablets and mobile only.
+         */
         menuToggle: function () {
             this.showMenu = !this.showMenu;
         },
+        /**
+         * @vuese
+         * Used to switch the theme of the site. Fires the `themeChange` event.
+         */
         themeSwitch: function () {
             const html = document.querySelector("html");
 
@@ -101,6 +113,10 @@ export default {
                 localStorage.setItem("theme", "light");
             }
 
+            /**
+             * Fired when the theme is changed.
+             * @arg theme to change to
+             */
             this.$emit("themeChange", localStorage.getItem("theme"));
         },
     },

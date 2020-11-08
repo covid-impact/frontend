@@ -26,6 +26,11 @@
 
 <script>
 import Menu from "./components/Menu";
+// @vuese
+//@group Home
+/**
+ * The COVID-19 app resides here
+ */
 export default {
     name: "App",
     data: function () {

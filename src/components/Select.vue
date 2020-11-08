@@ -49,6 +49,10 @@
 
 <script>
 import countries from "@/assets/countries";
+// @group Components
+/**
+ * Select component for user to select a country
+ */
 export default {
     data: function () {
         return {
@@ -60,11 +64,24 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Selects the country the user clicked on.Fires the `countryChange` event .
+         * @arg index of the country that is clicked by the user.
+         */
         selectCountry: function (index) {
             this.selection = this.countries[index];
+            /**
+             * Fired when user selects a country
+             * @arg an object with name and ISO codes for the country
+             */
             this.$emit("conutryChange", this.selection);
             this.showList = false;
         },
+        /**
+         * @vuese
+         * Toggles the lists of options that the user can select.
+         */
         toggleList: function () {
             this.showList = !this.showList;
         },

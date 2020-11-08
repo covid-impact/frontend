@@ -11,15 +11,21 @@
 
 <script>
 import LineChart from "./LineChart.js";
-
+// @group Components
+/**
+ * Makes a chart using Chart.js
+ */
 export default {
     components: {
         LineChart,
     },
     props: {
-        title: String,
-        data: Object,
-        options: Object,
+        // Title of the chart
+        title: { type: String, required: false },
+        // Data the chart graphs
+        data: { type: Object, required: true },
+        // Options for the chart (like for changing colors, axes and legends etc.)
+        options: { type: Object, required: true },
     },
 };
 </script>

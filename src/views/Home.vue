@@ -71,14 +71,18 @@
 import Chart from "../components/Chart";
 import Select from "../components/Select";
 import options from "@/assets/chartOptions.js";
-
+// @group Views
+/**
+ * Home for the website
+ */
 export default {
     components: {
         Chart,
         Select,
     },
     props: {
-        theme: String,
+        // The theme for the page
+        theme: { type: String, required: true, default: "light" },
     },
     data: function () {
         return {
@@ -127,6 +131,10 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Gets the historical covid data for the user selected country.
+         */
         getData: async function () {
             try {
                 this.historyDataCovidError = false;
@@ -225,12 +233,21 @@ export default {
 
             // this.dataStock = dataStock;
         },
+        /**
+         * @vuese
+         * Changes the country to the user selection.
+         * @arg an object with name and ISO codes for the country
+         */
         countryChange: function (country) {
             this.country = country;
             localStorage.setItem("country", JSON.stringify(country));
             this.getConutryData();
             this.getData();
         },
+        /**
+         * @vuese
+         * Gets the current data for selected country
+         */
         getConutryData: async function () {
             const url = `https://disease.sh/v3/covid-19/countries/${this.country.code3}?strict=true`;
             const response = await fetch(url);
