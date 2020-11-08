@@ -14,9 +14,10 @@
                 >
             </router-link>
         </section>
-        <Search v-on:searchWithInput="search"></Search>
         <Menu @themeChange="themeChange" />
-        <section class="search-bar"></section>
+        <section class="search-bar">
+            <Search v-on:searchWithInput="search"></Search>
+        </section>
         <section class="main">
             <transition name="slide-down" mode="out-in">
                 <router-view :theme="theme" :key="$route.path" />
@@ -26,13 +27,18 @@
 </template>
 
 <script>
-import Chart from "./components/Chart";
 import Search from "./components/Search";
+import Menu from "./components/Menu";
+// @vuese
+//@group Home
+/**
+ * The COVID-19 app resides here
+ */
 export default {
     name: "App",
     components: {
-        Chart,
         Search,
+        Menu,
     },
     data: function () {
         return {
@@ -65,14 +71,16 @@ export default {
             },
         };
     },
-    components: {
-        Menu,
-    },
     methods: {
         //function  for using covid API(disease.sh)
         //input - location, string, country
         //this.covidData = data from Covid api
         //return dates(dataCovid.labels)
+        /**
+         * @vuese
+         * for using covid API(disease.sh)
+         * @arg location for COVID data
+         */
         getCovidData: async function (location) {
             console.log("searching for location " + location);
             const response = await fetch(
@@ -232,6 +240,11 @@ export default {
             this.getStockData("CCL", dates);
             this.dates = dates;
         },
+        /**
+         * @vuese
+         * for switching themes
+         * @arg theme to switch to
+         */
         themeChange: function (theme) {
             this.theme = theme;
         },
@@ -263,7 +276,7 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
     --background: #fff;
     --background-secondary: rgb(220, 226, 255);
-    --card-bg: #fff;
+    --background-card: #fff;
     --text: #000;
     --text-menu: #000;
     --deaths: rgb(244, 67, 54);
@@ -347,6 +360,8 @@ body {
 
 .search-bar {
     grid-area: search;
+    display: flex;
+    align-items: center;
 }
 
 .main {
@@ -368,7 +383,7 @@ body {
         grid-template-rows: max-content max-content 1fr;
         grid-template-areas:
             "logo menu"
-            "serach search"
+            "search search"
             "main main";
     }
 
@@ -387,7 +402,7 @@ body {
         grid-template-rows: max-content max-content 1fr;
         grid-template-areas:
             "logo menu"
-            "serach search"
+            "search search"
             "main main";
     }
 

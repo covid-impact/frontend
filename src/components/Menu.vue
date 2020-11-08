@@ -29,7 +29,7 @@
                     <div class="theme--switch--toggle">
                         <input
                             @click="themeSwitch"
-                            v-model="themeLight"
+                            v-model="themeDark"
                             id="check"
                             aria-label="Switch themes"
                             type="checkbox"
@@ -59,7 +59,7 @@
                         <div class="theme--switch--toggle">
                             <input
                                 @click="themeSwitch"
-                                v-model="themeLight"
+                                v-model="themeDark"
                                 id="check"
                                 aria-label="Switch themes"
                                 type="checkbox"
@@ -85,7 +85,7 @@ export default {
     data: function () {
         return {
             showMenu: false,
-            themeLight: true,
+            themeDark: false,
         };
     },
     methods: {

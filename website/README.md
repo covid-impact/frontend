@@ -1,37 +1,16 @@
 # COVID - Finance
 
-## Project setup
+## COMP8117-1-R-2020F-a Advanced Software Eng. Topics
 
-You need to install npm to run this project a simpler version with just HTML and CSS is also there.
+### Project
 
-```
-npm install
-```
+> project is to demonstrate your ability to work as part of a team on a medium size, distributed, software development project.
 
-### Compiles and hot-reloads for development
+## Team Members
 
-```
-npm run serve
-```
-
-### Run Docs
-
-```
-npm run docs:dev
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+| UWindsor ID | Member                  | Email                |
+| ----------- | ----------------------- | -------------------- |
+| 110026126   | Prabhjyot Singh Dhillon | dhillo91@uwindsor.ca |
+| 110041455   | Frederick Ho            | verma11@uwindsor.ca  |
+| 110057390   | Harry Bhagat            | bhagath@uwindsor.ca  |
+| 103840152   | Sahil Verma             | hochong@uwindsor.ca  |
