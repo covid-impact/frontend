@@ -2,7 +2,7 @@
 
 ## Project setup
 
-You need to install npm to run this project a simpler version with just HTML and CSS is also there.
+You need to install npm to run this project.
 
 ```
 npm install
