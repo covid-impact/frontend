@@ -43,7 +43,7 @@ export default {
 
 <style>
 .searchbar {
-    width: 100%;
+    width: 90%;
     font-size: 1.3em;
     display: flex;
     padding: 10px;

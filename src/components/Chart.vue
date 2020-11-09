@@ -2,7 +2,7 @@
     <section class="chart">
         <h2>{{ title }}</h2>
         <line-chart
-            :style="{ height: '100%' }"
+            :style="{ height: '100%', width: '100%' }"
             :chart-data="data"
             :options="options"
         />

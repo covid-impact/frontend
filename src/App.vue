@@ -15,7 +15,9 @@
             </router-link>
         </section>
         <Menu @themeChange="themeChange" />
-
+        <section class="search-bar">
+            <Search v-on:searchWithInput="search"></Search>
+        </section>
         <section class="main">
             <transition name="slide-down" mode="out-in">
                 <router-view :theme="theme" :key="$route.path" />
@@ -26,6 +28,7 @@
 
 <script>
 import Menu from "./components/Menu";
+import Search from "./components/Search";
 // @vuese
 //@group Home
 /**
@@ -35,6 +38,7 @@ export default {
     name: "App",
     components: {
         Menu,
+        Search,
     },
     data: function () {
         return {
@@ -325,7 +329,7 @@ body {
 }
 
 .app {
-    width: 100vw;
+    width: 100%;
     height: 100%;
     min-height: 100vh;
     display: grid;
@@ -354,7 +358,6 @@ body {
     text-decoration: none;
 }
 
-
 .main {
     grid-area: main;
     padding: 10px;
@@ -362,6 +365,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    width: 100%;
 }
 
 @media (max-width: 1199.98px) {

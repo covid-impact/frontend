@@ -2,6 +2,16 @@
 
 Select component for user to select a country
 
+## Props
+
+<!-- @vuese:Select:props:start -->
+|Name|Description|Type|Required|Default|
+|---|---|---|---|---|
+|countries|-|`Array`|`true`|-|
+
+<!-- @vuese:Select:props:end -->
+
+
 ## Events
 
 <!-- @vuese:Select:events:start -->

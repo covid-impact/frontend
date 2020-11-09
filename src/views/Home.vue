@@ -1,8 +1,5 @@
 <template>
     <section class="home">
-        <section class="search-bar">
-            <Search v-on:searchWithInput="search"></Search>
-        </section>
         <h1 class="main--heading">COVID-19 Data</h1>
         <section class="country">
             <h2 class="heading">{{ country.name }}</h2>
@@ -75,7 +72,6 @@ import countries from "@/assets/countries";
 import Chart from "../components/Chart";
 import Select from "../components/Select";
 import options from "@/assets/chartOptions.js";
-import Search from "../components/Search";
 
 // @group Views
 /**
@@ -85,7 +81,6 @@ export default {
     components: {
         Chart,
         Select,
-        Search,
     },
     props: {
         // The theme for the page
@@ -144,19 +139,20 @@ export default {
          * trigger when button pressed
          */
         search(input) {
-          input = input.toLowerCase();
-          let inputCountry = "";
-          for (let i in this.countries){
-            if (this.countries[i].code.toLowerCase().match(input) ||
-                this.countries[i].code3.toLowerCase().match(input) ||
-                this.countries[i].name.toLowerCase().match(input) ||
-                this.countries[i].number.toLowerCase().match(input)) {
-                  inputCountry = this.countries[i];
+            input = input.toLowerCase();
+            let inputCountry = "";
+            for (let i in this.countries) {
+                if (
+                    this.countries[i].code.toLowerCase().match(input) ||
+                    this.countries[i].code3.toLowerCase().match(input) ||
+                    this.countries[i].name.toLowerCase().match(input) ||
+                    this.countries[i].number.toLowerCase().match(input)
+                ) {
+                    inputCountry = this.countries[i];
                 }
-
-          }
-          console.log(inputCountry);
-          this.countryChange(inputCountry);
+            }
+            console.log(inputCountry);
+            this.countryChange(inputCountry);
         },
         /**
          * @vuese
