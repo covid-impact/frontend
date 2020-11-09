@@ -31,7 +31,6 @@ export default {
          * Fires the `searchWithInput` event back to parent component
          */
         pressSearchButton: function () {
-            console.log(this.searchInput);
             /**
              * Fired when button is pressed
              * @arg the input from user
