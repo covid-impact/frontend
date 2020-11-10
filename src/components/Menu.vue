@@ -18,11 +18,51 @@
         </svg>
         <ul class="menu">
             <router-link tag="li" class="menu--item" :to="{ name: 'home' }"
-                >COVID</router-link
-            >
+                >COVID-19
+            </router-link>
+            <ul class="sub--menu">
+                <router-link
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'covidHome' }"
+                    >Country</router-link
+                >
+                <router-link
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'covidWorld' }"
+                    >World</router-link
+                >
+                <router-link
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'covidCity' }"
+                    >City</router-link
+                >
+            </ul>
             <router-link tag="li" class="menu--item" :to="{ name: 'finance' }"
                 >Finance</router-link
             >
+            <ul class="sub--menu">
+                <router-link
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'financeHome' }"
+                    >Country</router-link
+                >
+                <router-link
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'financeWorld' }"
+                    >World</router-link
+                >
+                <router-link
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'financeCity' }"
+                    >City</router-link
+                >
+            </ul>
             <li class="menu--item--theme">
                 <div class="theme--switch">
                     <h3>Light</h3>
@@ -45,14 +85,54 @@
         <transition name="slide-fade" mode="out-in">
             <ul v-if="showMenu" class="menu menu--mobile">
                 <router-link tag="li" class="menu--item" :to="{ name: 'home' }"
-                    >COVID</router-link
-                >
+                    >COVID-19
+                </router-link>
+                <ul class="sub--menu">
+                    <router-link
+                        tag="li"
+                        class="menu--item"
+                        :to="{ name: 'covidHome' }"
+                        >Country</router-link
+                    >
+                    <router-link
+                        tag="li"
+                        class="menu--item"
+                        :to="{ name: 'covidWorld' }"
+                        >World</router-link
+                    >
+                    <router-link
+                        tag="li"
+                        class="menu--item"
+                        :to="{ name: 'covidCity' }"
+                        >City</router-link
+                    >
+                </ul>
                 <router-link
                     tag="li"
                     class="menu--item"
                     :to="{ name: 'finance' }"
                     >Finance</router-link
                 >
+                <ul class="sub--menu">
+                    <router-link
+                        tag="li"
+                        class="menu--item"
+                        :to="{ name: 'financeHome' }"
+                        >Country</router-link
+                    >
+                    <router-link
+                        tag="li"
+                        class="menu--item"
+                        :to="{ name: 'financeWorld' }"
+                        >World</router-link
+                    >
+                    <router-link
+                        tag="li"
+                        class="menu--item"
+                        :to="{ name: 'financeCity' }"
+                        >City</router-link
+                    >
+                </ul>
                 <li class="menu--item--theme">
                     <div class="theme--switch">
                         <h3>Light</h3>
@@ -151,6 +231,13 @@ export default {
     display: flex;
     flex-direction: column;
     list-style-type: none;
+}
+
+.sub--menu {
+    list-style-type: none;
+    width: 80%;
+    height: max-content;
+    align-self: flex-end;
 }
 
 .menu--mobile {
@@ -262,6 +349,10 @@ export default {
         border-bottom-left-radius: 10px;
     }
 
+    .sub--menu {
+        margin-left: 20px;
+    }
+
     .menu--item {
         width: 90%;
     }
@@ -301,6 +392,10 @@ export default {
         z-index: 1;
         border-bottom-right-radius: 10px;
         border-bottom-left-radius: 10px;
+    }
+
+    .sub--menu {
+        margin-left: 20px;
     }
 
     .menu--item {

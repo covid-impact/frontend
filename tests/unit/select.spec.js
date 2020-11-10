@@ -1,12 +1,13 @@
-import {shallowMount} from "@vue/test-utils";
+import {shallowMount, mount} from "@vue/test-utils";
 import countries from "@/assets/countries";
 import Select from "@/components/Select.vue";
 
 describe("Select.vue", () => {
     it("Default message is 'Select some other country'", () => {
-        const wrapper = shallowMount(Select, {
+        const wrapper = mount(Select, {
             propsData: {
-                countries: countries,
+                placeholder: "Select some other country",
+                data: countries,
             },
         });
         const defaultMessage = wrapper.find("span");
@@ -18,7 +19,8 @@ describe("Select.vue", () => {
     it("Testing user selection", async () => {
         const wrapper = shallowMount(Select, {
             propsData: {
-                countries: countries,
+                placeholder: "Select some other country",
+                data: countries,
             },
             data() {
                 return {
@@ -31,14 +33,14 @@ describe("Select.vue", () => {
         const icon = wrapper.find("svg");
 
         const afghanistan = wrapper.find(".select--list--item:nth-of-type(1)");
-        const Australia = wrapper.find(".select--list--item:nth-of-type(13)");
+        const australia = wrapper.find(".select--list--item:nth-of-type(13)");
 
         expect(icon.text()).toMatch("Hide");
 
         await afghanistan.trigger("click");
         expect(country.text()).toMatch("Afghanistan");
 
-        await Australia.trigger("click");
+        await australia.trigger("click");
         expect(country.text()).toMatch("Australia");
     });
 });

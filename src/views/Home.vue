@@ -3,7 +3,11 @@
         <h1 class="main--heading">COVID-19 Data</h1>
         <section class="country">
             <h2 class="heading">{{ country.name }}</h2>
-            <Select :countries="countries" @conutryChange="countryChange" />
+            <Select
+                :data="countries"
+                @newSelection="countryChange"
+                placeholder="Select some other country"
+            />
         </section>
 
         <ul class="info--list">
@@ -99,6 +103,7 @@ export default {
                 name: "Canada",
                 number: "124",
             },
+            countryIndex: null,
             countryCOVIDData: {
                 updated: 1604676052089,
                 country: "Canada",
@@ -262,7 +267,8 @@ export default {
          * @arg an object with name and ISO codes for the country
          */
         countryChange: function (country) {
-            this.country = country;
+            this.country = country[0];
+            this.countryIndex = country[1];
             localStorage.setItem("country", JSON.stringify(country));
             this.getConutryData();
             this.getData();

@@ -36,8 +36,8 @@
             <ul v-if="showList" class="list">
                 <li
                     class="select--list--item"
-                    @click="selectCountry(index)"
-                    v-for="(country, index) in countries"
+                    @click="changeSelection(index)"
+                    v-for="(country, index) in data"
                     :key="country.code"
                 >
                     {{ country.name }}
@@ -54,7 +54,11 @@
  */
 export default {
     props: {
-        countries: {
+        placeholder: {
+            type: String,
+            required: true,
+        },
+        data: {
             type: Array,
             required: true,
         },
@@ -62,7 +66,7 @@ export default {
     data: function () {
         return {
             selection: {
-                name: "Select some other country",
+                name: this.placeholder,
             },
             showList: false,
         };
@@ -73,13 +77,13 @@ export default {
          * Selects the country the user clicked on.Fires the `countryChange` event .
          * @arg index of the country that is clicked by the user.
          */
-        selectCountry: function (index) {
-            this.selection = this.countries[index];
+        changeSelection: function (index) {
+            this.selection = this.data[index];
             /**
              * Fired when user selects a country
              * @arg an object with name and ISO codes for the country
              */
-            this.$emit("conutryChange", this.selection);
+            this.$emit("newSelection", [this.selection, index]);
             this.showList = false;
         },
         /**
@@ -113,7 +117,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 20vw;
+    min-width: 30vh;
+    width: 100%;
     padding: 10px;
     height: 100%;
     border: 2px solid var(--text);
@@ -133,8 +138,10 @@ export default {
 .list {
     list-style-type: none;
     position: absolute;
+    width: 100%;
     overflow: auto;
-    height: 30vh;
+    height: max-content;
+    max-height: 30vh;
     background: var(--background);
     padding: 10px;
     border-radius: 10px;
