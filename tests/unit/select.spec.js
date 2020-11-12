@@ -16,6 +16,22 @@ describe("Select.vue", () => {
         expect(icon.text()).toMatch("Show");
     });
 
+    it("Given default", () => {
+        const wrapper = mount(Select, {
+            propsData: {
+                placeholder: "Select some other country",
+                data: countries,
+                default: {
+                    name: "Default Name",
+                },
+            },
+        });
+        const defaultMessage = wrapper.find("span");
+        const icon = wrapper.find("svg");
+        expect(defaultMessage.text()).toMatch("Default Name");
+        expect(icon.text()).toMatch("Show");
+    });
+
     it("Testing user selection", async () => {
         const wrapper = shallowMount(Select, {
             propsData: {

@@ -5,6 +5,7 @@
             <h2 class="heading">{{ country.name }}</h2>
             <Select
                 :data="countries"
+                :default="country"
                 @newSelection="countryChange"
                 placeholder="Select some other country"
             />

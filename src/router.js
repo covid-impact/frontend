@@ -1,13 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import Finance from "./views/Finance.vue";
-
-import CovidWorld from "./views/CovidWorld.vue";
-import CovidCity from "./views/CovidCity.vue";
-
-import FinanceWorld from "./views/FinanceWorld.vue";
-import FinanceCity from "./views/FinanceCity.vue";
 
 Vue.use(Router);
 
@@ -27,32 +20,46 @@ export default new Router({
         {
             path: "/world",
             name: "covidWorld",
-            component: CovidWorld,
+            component: () =>
+                import(
+                    /* webpackChunkName: "covidWorld" */ "./views/CovidWorld.vue"
+                ),
         },
         {
             path: "/city",
             name: "covidCity",
-            component: CovidCity,
+            component: () =>
+                import(
+                    /* webpackChunkName: "covidCity" */ "./views/CovidCity.vue"
+                ),
         },
         {
             path: "/finance",
             name: "finance",
-            component: Finance,
+            component: () =>
+                import(/* webpackChunkName: "finance" */ "./views/Finance.vue"),
         },
         {
             path: "/",
             name: "financeHome",
-            component: Finance,
+            component: () =>
+                import(/* webpackChunkName: "finance" */ "./views/Finance.vue"),
         },
         {
             path: "/finance/world",
             name: "financeWorld",
-            component: FinanceWorld,
+            component: () =>
+                import(
+                    /* webpackChunkName: "financeWorld" */ "./views/FinanceWorld.vue"
+                ),
         },
         {
             path: "/finance/city",
             name: "financeCity",
-            component: FinanceCity,
+            component: () =>
+                import(
+                    /* webpackChunkName: "financeCity" */ "./views/FinanceCity.vue"
+                ),
         },
     ],
 });

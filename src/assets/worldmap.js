@@ -13,5 +13,5 @@ var mapData = {'title': 'World, Miller projection, medium resolution',
 export { mapData }
 
 export default function map (Highcharts) {
-Highcharts.maps['myMapName'] = mapData
+Highcharts.maps['worldMap'] = mapData
 }

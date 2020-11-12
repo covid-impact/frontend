@@ -62,10 +62,14 @@ export default {
             type: Array,
             required: true,
         },
+        default: {
+            type: Object,
+            required: false,
+        },
     },
     data: function () {
         return {
-            selection: {
+            selection: this.default || {
                 name: this.placeholder,
             },
             showList: false,

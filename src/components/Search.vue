@@ -5,6 +5,7 @@
             v-model="searchInput"
             placeholder="Enter location / company name"
             class="searchbar--input"
+            aria-label="Search location or company name"
         />
         <button class="searchbar--btn" v-on:click="pressSearchButton">
             Search
@@ -43,7 +44,7 @@ export default {
 
 <style>
 .searchbar {
-    width: 90%;
+    width: 100%;
     font-size: 1.3em;
     display: flex;
     padding: 10px;
@@ -54,9 +55,14 @@ export default {
     background: var(--background-card);
     border: 2px solid var(--text);
     padding: 10px;
-    width: 50%;
+    width: 100%;
     color: var(--text);
     border-radius: 10px;
+}
+
+.searchbar--input:focus {
+    background: var(--text-menu);
+    color: var(--background);
 }
 
 .searchbar--btn {
@@ -67,6 +73,18 @@ export default {
     color: var(--text);
     margin-left: 10px;
     cursor: pointer;
+}
+
+@media not all and (hover: none) {
+    .searchbar--input:hover {
+        background: var(--text-menu);
+        color: var(--background);
+    }
+
+    .searchbar--btn:hover {
+        background: var(--text-menu);
+        color: var(--background);
+    }
 }
 
 @media (max-width: 1199.98px) {

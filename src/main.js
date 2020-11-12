@@ -3,11 +3,11 @@ import router from "./router";
 import App from "./App.vue";
 import HighchartsVue from "highcharts-vue";
 import Highcharts from "highcharts";
-import stockInit from "highcharts/modules/stock";
+// import stockInit from "highcharts/modules/stock";
 import mapInit from "highcharts/modules/map";
 import addWorldMap from "@/assets/worldmap";
 
-stockInit(Highcharts);
+// stockInit(Highcharts);
 mapInit(Highcharts);
 addWorldMap(Highcharts);
 

@@ -1,11 +1,15 @@
 <template>
     <section class="covid--world">
         <h1 class="main--heading">World's COVID-19 data at a glance</h1>
-        <Select
-            @newSelection="selectionChange"
-            :data="select"
-            placeholder="Select Type"
-        />
+        <section class="covid--world--select">
+            <Select
+                @newSelection="selectionChange"
+                :data="select"
+                :default="select[0]"
+                placeholder="Select Type"
+            />
+        </section>
+
         <h2 v-if="loading">Loading...</h2>
         <highcharts
             v-else
@@ -22,6 +26,10 @@ export default {
     components: {
         Select,
     },
+    props: {
+        // The theme for the page
+        theme: { type: String, required: false, default: "light" },
+    },
     data() {
         return {
             select: [
@@ -37,26 +45,34 @@ export default {
             loading: false,
             error: false,
             series: [],
+            titleColor:
+                localStorage.getItem("theme") === "dark" ? "#fff" : "#000",
         };
     },
     computed: {
         mapOptions: function () {
             return {
                 chart: {
-                    map: "myMapName",
+                    map: "worldMap",
                     backgroundColor: "transparent",
                 },
                 title: {
-                    text: this.selection.name,
+                    text: "Cases",
+                    align: "left",
+                    style: {
+                        fontSize: "4em",
+                        color: this.titleColor,
+                    },
                 },
                 subtitle: {
                     text:
                         'Source map: <a href="http://code.highcharts.com/mapdata/custom/world.js">World, Miller projection, medium resolution</a>',
+                    align: "left",
                 },
                 mapNavigation: {
                     enabled: true,
                     buttonOptions: {
-                        alignTo: "spacingBox",
+                        align: "right",
                     },
                 },
                 colorAxis: {
@@ -143,6 +159,11 @@ export default {
         this.getData();
         this.loading = false;
     },
+    watch: {
+        theme: function (newTheme) {
+            this.titleColor = newTheme === "dark" ? "#fff" : "#000";
+        },
+    },
 };
 </script>
 <style scoped>
@@ -150,8 +171,18 @@ export default {
     width: 100%;
     height: 100%;
 }
+
+.covid--world--select {
+    margin-top: 10px;
+}
+
 .map {
     height: 100%;
+    margin-top: 10px;
+}
+
+.highcharts-title {
+    font-size: 2em;
 }
 
 @media (max-width: 1199.98px) {
