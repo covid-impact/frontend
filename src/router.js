@@ -40,7 +40,7 @@ export default new Router({
                 import(/* webpackChunkName: "finance" */ "./views/Finance.vue"),
         },
         {
-            path: "/",
+            path: "/finance",
             name: "financeHome",
             component: () =>
                 import(/* webpackChunkName: "finance" */ "./views/Finance.vue"),

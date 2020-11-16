@@ -10,8 +10,8 @@
                 placeholder="Select some other country"
             />
         </section>
-
-        <ul class="info--list">
+        <h2 v-if="loadingCountry">Loading...</h2>
+        <ul v-else class="info--list">
             <li class="info--list--item cases">
                 <h3 class="info--list--item--head">Cases</h3>
                 <span class="info--list--item--number">{{
@@ -61,7 +61,8 @@
                 }}</span>
             </li>
         </ul>
-        <h1 v-if="historyDataCovidError">No historical data found</h1>
+        <h2 v-if="loadingHistorical">Loading...</h2>
+        <h2 v-else-if="historyDataCovidError">No historical data found</h2>
         <Chart
             v-else
             :title="`COVID Data for ${country.name}`"
@@ -93,6 +94,8 @@ export default {
     },
     data: function () {
         return {
+            loadingCountry: false,
+            loadingHistorical: false,
             countries,
             dataCovid: {},
             historyDataCovidError: false,
@@ -166,6 +169,7 @@ export default {
          */
         getData: async function () {
             try {
+                this.loadingHistorical = true;
                 this.historyDataCovidError = false;
                 const response = await fetch(
                     `https://disease.sh/v3/covid-19/historical/${this.country.code}?lastdays=365`
@@ -205,7 +209,9 @@ export default {
                 };
 
                 this.dataCovid = dataCovid;
+                this.loadingHistorical = false;
             } catch (error) {
+                this.loadingHistorical = false;
                 this.historyDataCovidError = true;
             }
 
@@ -279,11 +285,13 @@ export default {
          * Gets the current data for selected country
          */
         getConutryData: async function () {
+            this.loadingCountry = true;
             const url = `https://disease.sh/v3/covid-19/countries/${this.country.code3}?strict=true`;
             const response = await fetch(url);
             const data = await response.json();
 
             this.countryCOVIDData = data;
+            this.loadingCountry = false;
         },
     },
     mounted() {

@@ -58,11 +58,12 @@ export default {
     width: 100%;
     color: var(--text);
     border-radius: 10px;
+    transition: 0.2s box-shadow;
 }
 
 .searchbar--input:focus {
-    background: var(--text-menu);
-    color: var(--background);
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
 }
 
 .searchbar--btn {
@@ -77,13 +78,15 @@ export default {
 
 @media not all and (hover: none) {
     .searchbar--input:hover {
-        background: var(--text-menu);
-        color: var(--background);
+        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+            0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+            0 12.5px 10px rgba(0, 0, 0, 0.06);
     }
 
     .searchbar--btn:hover {
-        background: var(--text-menu);
-        color: var(--background);
+        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+            0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+            0 12.5px 10px rgba(0, 0, 0, 0.06);
     }
 }
 

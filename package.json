@@ -8,7 +8,8 @@
         "test:unit": "vue-cli-service test:unit",
         "lint": "vue-cli-service lint",
         "docs:build": "vuepress build docs",
-        "docs:dev": "vuepress dev docs"
+        "docs:dev": "vuepress dev docs",
+        "build:report": "vue-cli-service build --report"
     },
     "dependencies": {
         "chart.js": "^2.9.4",

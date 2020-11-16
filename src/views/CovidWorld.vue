@@ -21,10 +21,18 @@
 </template>
 <script>
 import Select from "../components/Select";
+import { Chart } from "highcharts-vue";
+import Highcharts from "highcharts";
+import mapInit from "highcharts/modules/map";
+import addWorldMap from "@/assets/worldmap";
+
+mapInit(Highcharts);
+addWorldMap(Highcharts);
 
 export default {
     components: {
         Select,
+        highcharts: Chart,
     },
     props: {
         // The theme for the page
