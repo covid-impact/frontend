@@ -1,11 +1,15 @@
 <template>
     <div class="searchbar">
-        <input
+        <vue-suggestion
+            :items="suggestionItems"
+            :setLabel="setLabel"
             type="text"
             v-model="searchInput"
             placeholder="Enter location / company name"
             class="searchbar--input"
             aria-label="Search location or company name"
+            @changed="inputChange"
+            @selected="suggestionItemSelected"
         />
         <button class="searchbar--btn" v-on:click="pressSearchButton">
             Search
@@ -15,13 +19,16 @@
 
 <script>
 import countries from "@/assets/countries";
-
+import {VueSuggestion} from 'vue-suggestion'
 // @group Components
 /**
  * Search bar for location and stock
  */
 export default {
     name: "Search",
+    components: {
+      VueSuggestion,
+    },
     data: function () {
         return {
             searchInput: "",
@@ -29,10 +36,27 @@ export default {
             dataStock: {},
             dates: {},
             countries,
+            suggestionItems: [],
+            suggestionInput: {},
         };
     },
 
     methods: {
+        setLabel(item) {
+          this.searchInput = item.name;
+        },
+        suggestionItemSelected(item) {
+          this.searchInput = item.name;
+        },
+        inputChange(text) {
+          if(this.$route.name.includes("finance")){
+            //this.suggestionItems = countries.filter(el =>el.name.contains(text));
+          }else {
+            this.suggestionItems = countries.filter(el => el.name.includes(text));
+            console.log(this.suggestionItems);
+          }
+
+        },
         searchStock() {
           if (this.searchInput != ""){
             this.setlocalStorageValue("stockName", this.searchInput);

@@ -6,11 +6,12 @@ import Highcharts from "highcharts";
 // import stockInit from "highcharts/modules/stock";
 import mapInit from "highcharts/modules/map";
 import addWorldMap from "@/assets/worldmap";
-
+import VueSuggestion from 'vue-suggestion';
 // stockInit(Highcharts);
 mapInit(Highcharts);
 addWorldMap(Highcharts);
 
+Vue.use(VueSuggestion)
 Vue.use(HighchartsVue);
 Vue.config.productionTip = false;
 
