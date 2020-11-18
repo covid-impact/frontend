@@ -15,11 +15,17 @@ describe("Chart.vue", () => {
     });
     it("check click button", async () => {
         const spyLocalStorage = jest.spyOn(Search.methods, "pressSearchButton");
+        const $route = {
+            name: 'finance'
+        }
         const wrapper = shallowMount(Search, {
             data: function() {
                 return {
                     searchInput: "Canada",
                 };
+            },
+            mocks:{
+              $route,
             },
         });
         const searchButton = wrapper.find("button");
