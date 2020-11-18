@@ -1,11 +1,15 @@
 <template>
     <div class="searchbar">
-        <input
+        <vue-suggestion
+            :items="suggestionItems"
+            :setLabel="setLabel"
             type="text"
             v-model="searchInput"
             placeholder="Enter location / company name"
             class="searchbar--input"
             aria-label="Search location or company name"
+            @changed="inputChange"
+            @selected="suggestionItemSelected"
         />
         <button class="searchbar--btn" v-on:click="pressSearchButton">
             Search
@@ -14,30 +18,83 @@
 </template>
 
 <script>
+import countries from "@/assets/countries";
+import {VueSuggestion} from 'vue-suggestion'
 // @group Components
 /**
  * Search bar for location and stock
  */
 export default {
     name: "Search",
+    components: {
+      VueSuggestion,
+    },
     data: function () {
         return {
             searchInput: "",
+            dataCovid: {},
+            dataStock: {},
+            dates: {},
+            countries,
+            suggestionItems: [],
+            suggestionInput: {},
         };
     },
 
     methods: {
-        /**
-         * @vuese
-         * Fires the `searchWithInput` event back to parent component
-         */
-        pressSearchButton: function () {
-            /**
-             * Fired when button is pressed
-             * @arg the input from user
-             */
-            this.$emit("searchWithInput", this.searchInput);
+        setLabel(item) {
+          this.searchInput = item.name;
         },
+        suggestionItemSelected(item) {
+          this.searchInput = item.name;
+        },
+        inputChange(text) {
+          if(this.$route.name.includes("finance")){
+            //this.suggestionItems = countries.filter(el =>el.name.contains(text));
+          }else {
+            this.suggestionItems = countries.filter(el => el.name.includes(text));
+            console.log(this.suggestionItems);
+          }
+
+        },
+        searchStock() {
+          if (this.searchInput != ""){
+            this.setlocalStorageValue("stockName", this.searchInput);
+          }
+        },
+        searchCountry() {
+            let input = this.searchInput.toLowerCase();
+            let inputCountry = "";
+            for (let i in this.countries) {
+                if (
+                    this.countries[i].code.toLowerCase().match(input) ||
+                    this.countries[i].code3.toLowerCase().match(input) ||
+                    this.countries[i].name.toLowerCase().match(input) ||
+                    this.countries[i].number.toLowerCase().match(input)
+                ) {
+                    inputCountry = this.countries[i];
+                }
+            }
+            if (inputCountry == ""){
+              console.log("country not found");
+              return;
+            }
+            this.setlocalStorageValue("country", inputCountry);
+        },
+        setlocalStorageValue(key, value) {
+          localStorage.setItem(key, value);
+        },
+
+        pressSearchButton() {
+            if(this.$route.name.includes("finance")){
+              this.searchStock();
+            } else {
+              this.searchCountry();
+            }
+        },
+
+
+
     },
 };
 </script>
