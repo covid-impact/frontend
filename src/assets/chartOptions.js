@@ -2,7 +2,6 @@ const options = {
     light: {
         chart: {
             zoomType: "x",
-
             backgroundColor: "transparent",
         },
         title: {

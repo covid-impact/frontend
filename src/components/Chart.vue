@@ -33,5 +33,6 @@ export default {
 .chart {
     margin-top: 20px;
     width: 100%;
+    height: 100%;
 }
 </style>

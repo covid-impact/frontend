@@ -136,7 +136,7 @@ export default {
                     {
                         name: "Cases",
                         data: this.zip(cases, dates),
-                        color: "#000",
+                        color: "#708090",
                     },
                     {
                         name: "Deaths",
