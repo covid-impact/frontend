@@ -45,28 +45,30 @@ export default {
 <style>
 .searchbar {
     width: 100%;
-    font-size: 1.3em;
     display: flex;
     padding: 10px;
     align-items: center;
 }
 
 .searchbar--input {
+    font-size: 1.2em;
     background: var(--background-card);
     border: 2px solid var(--text);
     padding: 10px;
     width: 100%;
     color: var(--text);
     border-radius: 10px;
-    transition: 0.2s box-shadow;
-}
-
-.searchbar--input:focus {
+    transition: 0.2s box-shadow, 0.2s transform;
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
 }
 
+.searchbar--input:focus {
+    box-shadow: none;
+}
+
 .searchbar--btn {
+    font-size: 1.2em;
     padding: 10px;
     background: var(--background-card);
     border: 2px solid var(--text);
@@ -74,19 +76,20 @@ export default {
     color: var(--text);
     margin-left: 10px;
     cursor: pointer;
+    transition: 0.2s box-shadow, 0.2s transform;
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
 }
 
 @media not all and (hover: none) {
     .searchbar--input:hover {
-        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-            0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-            0 12.5px 10px rgba(0, 0, 0, 0.06);
+        box-shadow: none;
+        transform: translateY(2px);
     }
 
     .searchbar--btn:hover {
-        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-            0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-            0 12.5px 10px rgba(0, 0, 0, 0.06);
+        box-shadow: none;
+        transform: translateY(2px);
     }
 }
 

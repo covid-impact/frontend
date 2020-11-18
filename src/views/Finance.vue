@@ -8,28 +8,39 @@
         <h1 v-if="historyDataStockError">
             No historical stock data found for {{ stockName }}
         </h1>
-        <Chart
+        <stock-chart
             v-else
-            :title="`Stock Data for ${stockName}`"
+            :title="`${stockName} stock price`"
             :data="dataStock"
-            :options="options"
+        />
+        <Select
+            v-if="states != 'mainland' && !historyDataCovidError"
+            :data="getStates"
+            @newSelection="provinceChange"
+            :placeholder="`${
+                displaying === 'country'
+                    ? 'Select Province'
+                    : states[stateSelected]
+            }`"
         />
         <h1 v-if="historyDataCovidError">
             No historical covid data found for {{ country.name }}
         </h1>
-        <Chart
+        <stock-chart
             v-else
-            :title="`COVID Data for ${country.name}`"
+            :title="`COVID Data for ${
+                displaying === 'country' ? country.name : states[stateSelected]
+            }`"
             :data="dataCovid"
-            :options="options"
         />
         <!-- <Chart title="Stock Data" :data="dataStock" :options="options" /> -->
     </section>
 </template>
 
 <script>
-import Chart from "../components/Chart";
+import StockChart from "../components/StockChart";
 import options from "@/assets/chartOptions.js";
+import Select from "../components/Select";
 
 // @group Views
 /**
@@ -37,7 +48,8 @@ import options from "@/assets/chartOptions.js";
  */
 export default {
     components: {
-        Chart,
+        StockChart,
+        Select,
     },
     props: {
         // The theme for the page
@@ -50,128 +62,96 @@ export default {
             historyDataStockError: false,
             dataStock: {},
             dates: {},
-            stockName: "CCL",
+            stockName: localStorage.getItem("stockSymbol") || "CCL",
             options: options[localStorage.getItem("theme") || "light"],
-            countryCOVIDData: {
-                updated: 1604676052089,
-                country: "Canada",
-                countryInfo: {
-                    _id: 124,
-                    iso2: "CA",
-                    iso3: "CAN",
-                    lat: 60,
-                    long: -95,
-                    flag: "https://disease.sh/assets/img/flags/ca.png",
-                },
-                cases: 251338,
-                todayCases: 0,
-                deaths: 10381,
-                todayDeaths: 0,
-                recovered: 207998,
-                todayRecovered: 0,
-                active: 32959,
-                critical: 234,
-                casesPerOneMillion: 6639,
-                deathsPerOneMillion: 274,
-                tests: 9763591,
-                testsPerOneMillion: 257906,
-                population: 37857209,
-                continent: "North America",
-                oneCasePerPeople: 151,
-                oneDeathPerPeople: 3647,
-                oneTestPerPeople: 4,
-                activePerOneMillion: 870.61,
-                recoveredPerOneMillion: 5494.28,
-                criticalPerOneMillion: 6.18,
-            },
             country: JSON.parse(localStorage.getItem("country")) || {
                 code: "CA",
                 code3: "CAN",
                 name: "Canada",
                 number: "124",
             },
+            displaying: "country",
+            states: localStorage.getItem("states") || "mainland",
+            stateSelected: null,
         };
     },
+    computed: {
+        getStates: function () {
+            const isArray = Array.isArray(this.states);
+            if (isArray) {
+                let states = this.states.map((element, index) => {
+                    return { name: element, code: index };
+                });
+
+                return states;
+            } else {
+                let states = this.states.split(",");
+
+                let stateToSend = states.map((element, index) => {
+                    return { name: element, code: index };
+                });
+                return stateToSend;
+            }
+        },
+    },
     methods: {
-        /**
-         * @vuese
-         * Trigger when button pressed
-         * @arg user search input
-         */
-        search(input) {
-            this.stockName = input;
-            this.submitSearchCompany();
-        },
-        //function for searching stock company
-        //trigger by button click
-        //first get country of the stock
-        //then call getCovidData() of the country
-        //call getStockData() as well
-        submitSearchCompany: async function () {
-            //finance
-            var country = await this.getCountryFromCompany();
-            this.location = country;
-            let dates = await this.getCovidData(country);
-            this.getStockData(dates);
-        },
-        //function getting country from stock company using Stock API(iex)
-        //input - this.stockName
-        //return - comapny country
-        getCountryFromCompany: async function () {
-            const responseFinance = await fetch(
-                "https://sandbox.iexapis.com/stable/stock/" +
-                    this.stockName +
-                    "/company/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
-            );
-            const dataFinance = await responseFinance.json();
-            return dataFinance.country;
-        },
+        zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
         /**
          * @vuese
          * get the COVID-19 and stock market data
          */
-        getData: async function () {
+        getData: async function (type) {
+            let datesAll = null;
             try {
                 this.historyDataCovidError = false;
-                const response = await fetch(
-                    `https://disease.sh/v3/covid-19/historical/${this.country.code}?lastdays=365`
-                );
+                let response;
+                if (type === "country") {
+                    response = await fetch(
+                        `https://disease.sh/v3/covid-19/historical/${this.country.code}?lastdays=365`
+                    );
+                    this.displaying = "country";
+                }
+
+                if (type === "province") {
+                    response = await fetch(
+                        `https://disease.sh/v3/covid-19/historical/${
+                            this.country.code
+                        }/${this.states[this.stateSelected]}?lastdays=365`
+                    );
+                    this.displaying = "province";
+                }
                 const dataJSON = await response.json();
+
+                localStorage.setItem("states", dataJSON.province);
+                if (type === "country") {
+                    this.states = dataJSON.province;
+                }
 
                 let dates = Object.keys(dataJSON.timeline.cases);
                 let cases = Object.values(dataJSON.timeline.cases);
                 let deaths = Object.values(dataJSON.timeline.deaths);
                 let recovered = Object.values(dataJSON.timeline.recovered);
 
-                const dataCovid = {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: "Cases",
-                            data: cases,
-                            borderWidth: 1,
-                            borderColor: "gray",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "Deaths",
-                            data: deaths,
-                            borderWidth: 1,
-                            borderColor: "rgb(244, 67, 54)",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "Recovered",
-                            data: recovered,
-                            borderWidth: 1,
-                            borderColor: "rgb(118, 255, 3)",
-                            backgroundColor: "transparent",
-                        },
-                    ],
-                };
+                const series = [
+                    {
+                        name: "Cases",
+                        data: this.zip(cases, dates),
+                        color: "#000",
+                    },
+                    {
+                        name: "Deaths",
+                        data: this.zip(deaths, dates),
+                        color: "rgb(244, 67, 54)",
+                    },
+                    {
+                        name: "Recovered",
+                        data: this.zip(recovered, dates),
+                        color: "rgb(118, 255, 3)",
+                    },
+                ];
 
-                this.dataCovid = dataCovid;
-                this.dates = dates;
+                this.dataCovid = { ...this.options, series };
+                datesAll = dates;
             } catch (error) {
                 this.historyDataCovidError = true;
             }
@@ -194,52 +174,47 @@ export default {
                     low.push(element.low);
                 });
 
-                const dataStock = {
-                    labels: this.dates,
-                    datasets: [
-                        {
-                            label: "Open",
-                            data: open,
-                            borderWidth: 1,
-                            borderColor: "green",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "Close",
-                            data: close,
-                            borderWidth: 1,
-                            borderColor: "blue",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "High",
-                            data: high,
-                            borderWidth: 1,
-                            borderColor: "yellow",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "Low",
-                            data: low,
-                            borderWidth: 1,
-                            borderColor: "red",
-                            backgroundColor: "transparent",
-                        },
-                    ],
-                };
+                const series = [
+                    {
+                        name: "Open",
+                        data: this.zip(open, datesAll),
+                        color: "green",
+                    },
+                    {
+                        name: "Close",
+                        data: this.zip(close, datesAll),
+                        color: "blue",
+                    },
+                    {
+                        name: "High",
+                        data: this.zip(high, datesAll),
+                        color: "yellow",
+                    },
+                    {
+                        name: "Low",
+                        data: this.zip(low, datesAll),
+                        color: "red",
+                    },
+                ];
 
-                this.dataStock = dataStock;
+                this.dataStock = { ...this.options, series };
+                console.log(this.dataStock);
             } catch (error) {
                 this.historyDataStockError = true;
             }
         },
+        provinceChange: function (country) {
+            this.stateSelected = country[1];
+            this.getData("province");
+        },
     },
     mounted() {
-        this.getData();
+        this.getData("country");
     },
     watch: {
-        theme: function (newTheme) {
-            this.options = options[newTheme];
+        theme: function () {
+            this.dataCovid = { ...this.dataCovid };
+            this.dataStock = { ...this.dataStock };
         },
     },
 };
@@ -250,128 +225,3 @@ export default {
     width: 100%;
 }
 </style>
-
-// methods: {
-//         /**
-//           * function for using Stock API(iex)
-//           * input - stockName, string, name of stock
-//           * input - dates - labels = dates to be used in chart
-//           * this.stockData = data from Stock api
-//           * no return
-//          */
-//         getStockData: async function (dates) {
-//             try {
-//                 this.historyDataStockError = false;
-//                 const responseFinance = await fetch(
-//                     "https://sandbox.iexapis.com/stable/stock/" +
-//                         this.stockName +
-//                         "/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
-//                 );
-//                 const dataFinance = await responseFinance.json();
-//                 let close = [];
-//                 let open = [];
-//                 let high = [];
-//                 let low = [];
-//                 dataFinance.forEach((element) => {
-//                     close.push(element.close);
-//                     open.push(element.open);
-//                     high.push(element.high);
-//                     low.push(element.low);
-//                 });
-//                 const dataStock = {
-//                     labels: dates,
-//                     datasets: [
-//                         {
-//                             label: "Open",
-//                             data: open,
-//                             borderWidth: 1,
-//                             borderColor: "green",
-//                             backgroundColor: "transparent",
-//                         },
-//                         {
-//                             label: "Close",
-//                             data: close,
-//                             borderWidth: 1,
-//                             borderColor: "blue",
-//                             backgroundColor: "transparent",
-//                         },
-//                         {
-//                             label: "High",
-//                             data: high,
-//                             borderWidth: 1,
-//                             borderColor: "yellow",
-//                             backgroundColor: "transparent",
-//                         },
-//                         {
-//                             label: "Low",
-//                             data: low,
-//                             borderWidth: 1,
-//                             borderColor: "red",
-//                             backgroundColor: "transparent",
-//                         },
-//                     ],
-//                 };
-//                 this.dataStock = dataStock;
-//             } catch (error) {
-//                 this.historyDataStockError = true;
-//             }
-//         },
-//         //function for using Stock API(iex)
-//         //input - stockName, string, name of stock
-//         //input - dates - labels = dates to be used in chart
-//         //this.stockData = data from Stock api
-//         //no return
-//         getCovidData: async function () {
-//             try {
-//               this.historyDataCovidError = false;
-//               const response = await fetch(
-//                   "https://disease.sh/v3/covid-19/historical/" +
-//                       this.location +
-//                       "?lastdays=365"
-//               );
-//               const dataJSON = await response.json();
-//               let dates = Object.keys(dataJSON.timeline.cases);
-//               let cases = Object.values(dataJSON.timeline.cases);
-//               let deaths = Object.values(dataJSON.timeline.deaths);
-//               let recovered = Object.values(dataJSON.timeline.recovered);
-//               const dataCovid = {
-//                   labels: dates,
-//                   datasets: [
-//                       {
-//                           label: "Cases",
-//                           data: cases,
-//                           borderWidth: 1,
-//                           borderColor: "gray",
-//                           backgroundColor: "transparent",
-//                       },
-//                       {
-//                           label: "Deaths",
-//                           data: deaths,
-//                           borderWidth: 1,
-//                           borderColor: "red",
-//                           backgroundColor: "transparent",
-//                       },
-//                       {
-//                           label: "Recovered",
-//                           data: recovered,
-//                           borderWidth: 1,
-//                           borderColor: "green",
-//                           backgroundColor: "transparent",
-//                       },
-//                   ],
-//               };
-//               this.dataCovid = dataCovid;
-//               this.dates = dates;
-//               return dates;
-//             } catch (error) {
-//                 this.historyDataCovidError = true;
-//             }
-//         },
-//         /**
-//          * @vuese
-//          * setup
-//          */
-//         getData: async function () {
-//             this.search("CCL");
-//         }
-//     },

@@ -1,5 +1,5 @@
 <template>
-    <h1>Covid City</h1>
+    <h1>Currently only supports USA Counties</h1>
 </template>
 
 <script>

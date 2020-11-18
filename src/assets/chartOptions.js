@@ -1,62 +1,97 @@
 const options = {
     light: {
-        maintainAspectRatio: false,
-        elements: {
-            point: {
-                radius: 1.5,
+        chart: {
+            zoomType: "x",
+
+            backgroundColor: "transparent",
+        },
+        title: {
+            text: "",
+        },
+        subtitle: {
+            text:
+                document.ontouchstart === undefined
+                    ? "Click and drag in the plot area to zoom in"
+                    : "Pinch the chart to zoom in",
+            style: {
+                color: "#000",
             },
+        },
+        xAxis: {
+            type: "datetime",
+        },
+        yAxis: {
+            title: "",
         },
         legend: {
-            labels: {
-                fontColor: "black",
+            enabled: true,
+            itemStyle: {
+                color: "#000",
             },
         },
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                        fontColor: "black",
+        plotOptions: {
+            area: {
+                marker: {
+                    radius: 2,
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1,
                     },
                 },
-            ],
-            xAxes: [
-                {
-                    ticks: {
-                        fontColor: "black",
-                    },
-                },
-            ],
+                threshold: null,
+            },
         },
     },
     dark: {
-        maintainAspectRatio: false,
-        elements: {
-            point: {
-                radius: 1.5,
+        chart: {
+            zoomType: "x",
+
+            backgroundColor: "transparent",
+        },
+        title: {
+            text: "",
+        },
+        subtitle: {
+            text:
+                document.ontouchstart === undefined
+                    ? "Click and drag in the plot area to zoom in"
+                    : "Pinch the chart to zoom in",
+            style: {
+                color: "#dadada",
             },
+        },
+        xAxis: {
+            type: "datetime",
+            labels: {
+                style: {
+                    color: "#dadada",
+                },
+            },
+        },
+        yAxis: {
+            title: "",
         },
         legend: {
-            labels: {
-                fontColor: "white",
+            enabled: true,
+            itemStyle: {
+                color: "#dadada",
             },
         },
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                        fontColor: "white",
+        plotOptions: {
+            area: {
+                marker: {
+                    radius: 2,
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1,
                     },
                 },
-            ],
-            xAxes: [
-                {
-                    ticks: {
-                        fontColor: "white",
-                    },
-                },
-            ],
+                threshold: null,
+            },
         },
     },
 };

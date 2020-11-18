@@ -403,6 +403,7 @@ body {
 
     .logo {
         font-size: 2.3em;
+        padding: 10px 5px;
     }
 }
 </style>

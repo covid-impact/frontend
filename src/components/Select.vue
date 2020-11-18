@@ -128,6 +128,7 @@ export default {
     border: 2px solid var(--text);
     border-radius: 10px;
     z-index: 2;
+    transition: 0.2s box-shadow, 0.2s transform;
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
 }
@@ -161,6 +162,13 @@ export default {
     cursor: pointer;
     padding: 5px;
     border-bottom: 1px solid var(--text);
+}
+
+@media not all and (hover: none) {
+    .selected:hover {
+        box-shadow: none;
+        transform: translateY(2px);
+    }
 }
 
 @media (max-width: 1199.98px) {

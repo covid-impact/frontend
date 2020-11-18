@@ -1,20 +1,16 @@
 <template>
     <section class="chart">
         <h2>{{ title }}</h2>
-        <highcharts :options="data" />
+        <highcharts :constructor-type="'stockChart'" :options="data" />
     </section>
 </template>
 
 <script>
 import { Chart } from "highcharts-vue";
 import Highcharts from "highcharts";
-import exportingInit from "highcharts/modules/exporting";
+import stockInit from "highcharts/modules/stock";
 
-exportingInit(Highcharts);
-// @group Components
-/**
- * Makes a chart using Chart.js
- */
+stockInit(Highcharts);
 export default {
     components: {
         // LineChart,
@@ -30,8 +26,4 @@ export default {
 </script>
 
 <style>
-.chart {
-    margin-top: 20px;
-    width: 100%;
-}
 </style>

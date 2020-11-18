@@ -61,11 +61,27 @@
                 }}</span>
             </li>
         </ul>
+        <Select
+            v-if="
+                states != 'mainland' &&
+                !loadingHistorical &&
+                !historyDataCovidError
+            "
+            :data="getStates"
+            @newSelection="provinceChange"
+            :placeholder="`${
+                displaying === 'country'
+                    ? 'Select Province'
+                    : states[stateSelected]
+            }`"
+        />
         <h2 v-if="loadingHistorical">Loading...</h2>
         <h2 v-else-if="historyDataCovidError">No historical data found</h2>
         <Chart
             v-else
-            :title="`COVID Data for ${country.name}`"
+            :title="`COVID Data for ${
+                displaying === 'country' ? country.name : states[stateSelected]
+            }`"
             :data="dataCovid"
             :options="options"
         />
@@ -97,9 +113,10 @@ export default {
             loadingCountry: false,
             loadingHistorical: false,
             countries,
+            states: localStorage.getItem("states") || "mainland",
+            stateSelected: null,
             dataCovid: {},
             historyDataCovidError: false,
-            dataStock: {},
             options: options[localStorage.getItem("theme") || "light"],
             country: JSON.parse(localStorage.getItem("country")) || {
                 code: "CA",
@@ -107,166 +124,94 @@ export default {
                 name: "Canada",
                 number: "124",
             },
+            displaying: "country",
             countryIndex: null,
-            countryCOVIDData: {
-                updated: 1604676052089,
-                country: "Canada",
-                countryInfo: {
-                    _id: 124,
-                    iso2: "CA",
-                    iso3: "CAN",
-                    lat: 60,
-                    long: -95,
-                    flag: "https://disease.sh/assets/img/flags/ca.png",
-                },
-                cases: 251338,
-                todayCases: 0,
-                deaths: 10381,
-                todayDeaths: 0,
-                recovered: 207998,
-                todayRecovered: 0,
-                active: 32959,
-                critical: 234,
-                casesPerOneMillion: 6639,
-                deathsPerOneMillion: 274,
-                tests: 9763591,
-                testsPerOneMillion: 257906,
-                population: 37857209,
-                continent: "North America",
-                oneCasePerPeople: 151,
-                oneDeathPerPeople: 3647,
-                oneTestPerPeople: 4,
-                activePerOneMillion: 870.61,
-                recoveredPerOneMillion: 5494.28,
-                criticalPerOneMillion: 6.18,
-            },
+            countryCOVIDData: {},
         };
     },
-    methods: {
-        /**
-         * @vuese
-         * trigger when button pressed
-         */
-        search(input) {
-            input = input.toLowerCase();
-            let inputCountry = "";
-            for (let i in this.countries) {
-                if (
-                    this.countries[i].code.toLowerCase().match(input) ||
-                    this.countries[i].code3.toLowerCase().match(input) ||
-                    this.countries[i].name.toLowerCase().match(input) ||
-                    this.countries[i].number.toLowerCase().match(input)
-                ) {
-                    inputCountry = this.countries[i];
-                }
+    computed: {
+        getStates: function () {
+            const isArray = Array.isArray(this.states);
+            if (isArray) {
+                let states = this.states.map((element, index) => {
+                    return { name: element, code: index };
+                });
+
+                return states;
+            } else {
+                let states = this.states.split(",");
+
+                let stateToSend = states.map((element, index) => {
+                    return { name: element, code: index };
+                });
+                return stateToSend;
             }
-            console.log(inputCountry);
-            this.countryChange(inputCountry);
         },
+    },
+    methods: {
+        zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
         /**
          * @vuese
          * Gets the historical covid data for the user selected country.
          */
-        getData: async function () {
+        getData: async function (type) {
             try {
                 this.loadingHistorical = true;
                 this.historyDataCovidError = false;
-                const response = await fetch(
-                    `https://disease.sh/v3/covid-19/historical/${this.country.code}?lastdays=365`
-                );
+                let response;
+                if (type === "country") {
+                    response = await fetch(
+                        `https://disease.sh/v3/covid-19/historical/${this.country.code}?lastdays=365`
+                    );
+                    this.displaying = "country";
+                }
+
+                if (type === "province") {
+                    response = await fetch(
+                        `https://disease.sh/v3/covid-19/historical/${
+                            this.country.code
+                        }/${this.states[this.stateSelected]}?lastdays=365`
+                    );
+                    this.displaying = "province";
+                }
                 const dataJSON = await response.json();
+
+                localStorage.setItem("states", dataJSON.province);
+                if (type === "country") {
+                    this.states = dataJSON.province;
+                }
 
                 let dates = Object.keys(dataJSON.timeline.cases);
                 let cases = Object.values(dataJSON.timeline.cases);
                 let deaths = Object.values(dataJSON.timeline.deaths);
                 let recovered = Object.values(dataJSON.timeline.recovered);
 
-                const dataCovid = {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: "Cases",
-                            data: cases,
-                            borderWidth: 1,
-                            borderColor: "gray",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "Deaths",
-                            data: deaths,
-                            borderWidth: 1,
-                            borderColor: "rgb(244, 67, 54)",
-                            backgroundColor: "transparent",
-                        },
-                        {
-                            label: "Recovered",
-                            data: recovered,
-                            borderWidth: 1,
-                            borderColor: "rgb(118, 255, 3)",
-                            backgroundColor: "transparent",
-                        },
-                    ],
-                };
+                const series = [
+                    {
+                        name: "Cases",
+                        data: this.zip(cases, dates),
+                        color: "#000",
+                    },
+                    {
+                        name: "Deaths",
+                        data: this.zip(deaths, dates),
+                        color: "rgb(244, 67, 54)",
+                    },
+                    {
+                        name: "Recovered",
+                        data: this.zip(recovered, dates),
+                        color: "rgb(118, 255, 3)",
+                    },
+                ];
 
-                this.dataCovid = dataCovid;
+                this.dataCovid = { ...this.options, series };
                 this.loadingHistorical = false;
+
+                // console.log(this.dataCovid);
             } catch (error) {
                 this.loadingHistorical = false;
                 this.historyDataCovidError = true;
             }
-
-            // const responseFinance = await fetch(
-            //     "https://sandbox.iexapis.com/stable/stock/CCL/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
-            // );
-            // const dataFinance = await responseFinance.json();
-
-            // let close = [];
-            // let open = [];
-            // let high = [];
-            // let low = [];
-
-            // dataFinance.forEach((element) => {
-            //     close.push(element.close);
-            //     open.push(element.open);
-            //     high.push(element.high);
-            //     low.push(element.low);
-            // });
-
-            // const dataStock = {
-            //     labels: dates,
-            //     datasets: [
-            //         {
-            //             label: "Open",
-            //             data: open,
-            //             borderWidth: 1,
-            //             borderColor: "green",
-            //             backgroundColor: "transparent",
-            //         },
-            //         {
-            //             label: "Close",
-            //             data: close,
-            //             borderWidth: 1,
-            //             borderColor: "blue",
-            //             backgroundColor: "transparent",
-            //         },
-            //         {
-            //             label: "High",
-            //             data: high,
-            //             borderWidth: 1,
-            //             borderColor: "yellow",
-            //             backgroundColor: "transparent",
-            //         },
-            //         {
-            //             label: "Low",
-            //             data: low,
-            //             borderWidth: 1,
-            //             borderColor: "red",
-            //             backgroundColor: "transparent",
-            //         },
-            //     ],
-            // };
-
-            // this.dataStock = dataStock;
         },
         /**
          * @vuese
@@ -274,11 +219,14 @@ export default {
          * @arg an object with name and ISO codes for the country
          */
         countryChange: function (country) {
-            this.country = country[0];
-            this.countryIndex = country[1];
-            localStorage.setItem("country", JSON.stringify(country));
+            [this.country, this.countryIndex] = country;
+            localStorage.setItem("country", JSON.stringify(this.country));
             this.getConutryData();
-            this.getData();
+            this.getData("country");
+        },
+        provinceChange: function (country) {
+            this.stateSelected = country[1];
+            this.getData("province");
         },
         /**
          * @vuese
@@ -289,17 +237,18 @@ export default {
             const url = `https://disease.sh/v3/covid-19/countries/${this.country.code3}?strict=true`;
             const response = await fetch(url);
             const data = await response.json();
-
             this.countryCOVIDData = data;
+
             this.loadingCountry = false;
         },
     },
     mounted() {
-        this.getData();
+        this.getData("country");
+        this.getConutryData();
     },
     watch: {
-        theme: function (newTheme) {
-            this.options = options[newTheme];
+        theme: function () {
+            this.dataCovid = { ...this.dataCovid };
         },
     },
 };
