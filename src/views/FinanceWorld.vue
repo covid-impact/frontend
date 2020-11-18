@@ -127,7 +127,6 @@ export default {
                 ];
 
                 this.dataStock = { ...this.options, series };
-                console.log(this.dataStock);
             } catch (error) {
                 this.historyDataStockError = true;
             }

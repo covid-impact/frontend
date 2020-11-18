@@ -61,6 +61,15 @@ export default {
         Chart,
         StockChart,
     },
+    props: {
+        // The theme for the page
+        theme: { type: String, required: false, default: "light" },
+        stockName: {
+            type: String,
+            required: false,
+            deafult: () => "CCL",
+        },
+    },
     computed: {
         getData: function () {
             const data = this.currentCountyData[this.countySelected];
@@ -101,7 +110,6 @@ export default {
             countyNameList: [],
             historyDataStockError: false,
             dataStock: {},
-            stockName: localStorage.getItem("stockSymbol") || "CCL",
         };
     },
     methods: {
@@ -201,7 +209,6 @@ export default {
                 ];
 
                 this.dataStock = { ...this.options, series };
-                console.log(this.dataStock);
             } catch (error) {
                 this.historyDataStockError = true;
             }
@@ -218,6 +225,13 @@ export default {
         await this.getStockData();
         await this.getCountiesList();
         await this.getCountyData();
+    },
+    watch: {
+        stockName: async function () {
+            await this.getStockData();
+            await this.getCountiesList();
+            await this.getCountyData();
+        },
     },
 };
 </script>

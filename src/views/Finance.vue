@@ -54,6 +54,11 @@ export default {
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
+        stockName: {
+            type: String,
+            required: false,
+            deafult: () => "CCL",
+        },
     },
     data: function () {
         return {
@@ -62,7 +67,6 @@ export default {
             historyDataStockError: false,
             dataStock: {},
             dates: {},
-            stockName: localStorage.getItem("stockSymbol") || "CCL",
             options: options[localStorage.getItem("theme") || "light"],
             country: JSON.parse(localStorage.getItem("country")) || {
                 code: "CA",
@@ -158,7 +162,7 @@ export default {
 
             try {
                 const responseFinance = await fetch(
-                    "https://sandbox.iexapis.com/stable/stock/CCL/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
+                    `https://sandbox.iexapis.com/stable/stock/${this.stockName}/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b`
                 );
                 const dataFinance = await responseFinance.json();
 
@@ -198,7 +202,6 @@ export default {
                 ];
 
                 this.dataStock = { ...this.options, series };
-                console.log(this.dataStock);
             } catch (error) {
                 this.historyDataStockError = true;
             }
@@ -213,8 +216,10 @@ export default {
     },
     watch: {
         theme: function () {
-            this.dataCovid = { ...this.dataCovid };
-            this.dataStock = { ...this.dataStock };
+            this.getData("country");
+        },
+        stockName: function () {
+            this.getData("country");
         },
     },
 };

@@ -3,12 +3,12 @@
         <h1 class="main--heading">COVID-19 Data</h1>
         <section class="country">
             <h2 class="heading">{{ country.name }}</h2>
-            <Select
+            <!-- <Select
                 :data="countries"
                 :default="country"
                 @newSelection="countryChange"
                 placeholder="Select some other country"
-            />
+            /> -->
         </section>
         <h2 v-if="loadingCountry">Loading...</h2>
         <ul v-else class="info--list">
@@ -107,6 +107,18 @@ export default {
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
+        country: {
+            type: Object,
+            required: false,
+            default: function () {
+                return {
+                    code: "CA",
+                    code3: "CAN",
+                    name: "Canada",
+                    number: "124",
+                };
+            },
+        },
     },
     data: function () {
         return {
@@ -118,12 +130,6 @@ export default {
             dataCovid: {},
             historyDataCovidError: false,
             options: options[localStorage.getItem("theme") || "light"],
-            country: JSON.parse(localStorage.getItem("country")) || {
-                code: "CA",
-                code3: "CAN",
-                name: "Canada",
-                number: "124",
-            },
             displaying: "country",
             countryIndex: null,
             countryCOVIDData: {},
@@ -250,6 +256,10 @@ export default {
         theme: function () {
             this.dataCovid = { ...this.dataCovid };
         },
+        country: function () {
+            this.getData("country");
+            this.getConutryData();
+        },
     },
 };
 </script>
@@ -257,12 +267,6 @@ export default {
 <style>
 .home {
     width: 100%;
-}
-
-.search-bar {
-    grid-area: search;
-    display: flex;
-    align-items: center;
 }
 
 .main--heading {
