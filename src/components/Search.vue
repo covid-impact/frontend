@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import countries from "@/assets/countries";
+
 // @group Components
 /**
  * Search bar for location and stock
@@ -23,21 +25,52 @@ export default {
     data: function () {
         return {
             searchInput: "",
+            dataCovid: {},
+            dataStock: {},
+            dates: {},
+            countries,
         };
     },
 
     methods: {
-        /**
-         * @vuese
-         * Fires the `searchWithInput` event back to parent component
-         */
-        pressSearchButton: function () {
-            /**
-             * Fired when button is pressed
-             * @arg the input from user
-             */
-            this.$emit("searchWithInput", this.searchInput);
+        searchStock() {
+          if (this.searchInput != ""){
+            this.setlocalStorageValue("stockName", this.searchInput);
+          }
         },
+        searchCountry() {
+            let input = this.searchInput.toLowerCase();
+            let inputCountry = "";
+            for (let i in this.countries) {
+                if (
+                    this.countries[i].code.toLowerCase().match(input) ||
+                    this.countries[i].code3.toLowerCase().match(input) ||
+                    this.countries[i].name.toLowerCase().match(input) ||
+                    this.countries[i].number.toLowerCase().match(input)
+                ) {
+                    inputCountry = this.countries[i];
+                }
+            }
+            if (inputCountry == ""){
+              console.log("country not found");
+              return;
+            }
+            this.setlocalStorageValue("country", inputCountry);
+        },
+        setlocalStorageValue(key, value) {
+          localStorage.setItem(key, value);
+        },
+
+        pressSearchButton() {
+            if(this.$route.name.includes("finance")){
+              this.searchStock();
+            } else {
+              this.searchCountry();
+            }
+        },
+
+
+
     },
 };
 </script>
