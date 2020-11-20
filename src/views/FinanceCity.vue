@@ -5,7 +5,7 @@
         </h1>
         <stock-chart
             v-else
-            :title="`${stockName} stock price`"
+            :title="`${stockName.name} |  ${stockName.region} | ${stockName.symbol} | ${stockName.exchange} stock price`"
             :data="dataStock"
         />
 
@@ -22,7 +22,7 @@
                 @newSelection="countyChange"
             />
         </div>
-        <h1 v-if="loadingCounties">Loading...</h1>
+        <Loading v-if="loadingCounties" />
         <h1 v-if="countiesError">Error ocuured while getting Counties</h1>
 
         <div v-if="!loadingCounty && !countyError" class="select--margin--top">
@@ -33,7 +33,7 @@
             />
         </div>
 
-        <h1 v-if="loadingCounty">Loading...</h1>
+        <Loading v-if="loadingCounty" />
         <h1 v-if="countyError">Error ocuured while getting County</h1>
 
         <Chart
@@ -52,6 +52,7 @@
 <script>
 import Select from "../components/Select";
 import StockChart from "../components/StockChart";
+import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
 import Chart from "../components/Chart";
 
@@ -60,14 +61,29 @@ export default {
         Select,
         Chart,
         StockChart,
+        Loading,
     },
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
         stockName: {
-            type: String,
+            type: Object,
             required: false,
-            deafult: () => "CCL",
+            deafult: () => ({
+                isEnabled: true,
+                name: "Apple Inc.",
+                cik: "320193",
+                type: "cs",
+                symbol: "AAPL",
+                region: "US",
+                currency: "USD",
+                exchange: "NAS",
+                queryableSymbol: "aapl",
+                iexId: "IEX_4D48333344362D52",
+                figi: "BBG000B9XRY4",
+                date: "2020-11-18",
+                queryable: "apple inc.",
+            }),
         },
     },
     computed: {
@@ -132,6 +148,7 @@ export default {
                 this.countyList = [...countyList];
                 this.loadingCounties = false;
             } catch (error) {
+                console.log(error);
                 this.loadingCounties = false;
                 this.countiesError = true;
             }

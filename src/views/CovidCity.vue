@@ -13,7 +13,9 @@
                 @newSelection="countyChange"
             />
         </div>
-        <h1 v-if="loadingCounties">Loading...</h1>
+        <!-- <h1 v-if="loadingCounties">Loading...</h1> -->
+        <Loading v-if="loadingCounties" />
+
         <h1 v-if="countiesError">Error ocuured while getting Counties</h1>
 
         <div v-if="!loadingCounty && !countyError" class="select--margin--top">
@@ -24,7 +26,8 @@
             />
         </div>
 
-        <h1 v-if="loadingCounty">Loading...</h1>
+        <!-- <h1 v-if="loadingCounty">Loading...</h1> -->
+        <Loading v-if="loadingCounty" />
         <h1 v-if="countyError">Error ocuured while getting County</h1>
 
         <Chart
@@ -42,12 +45,16 @@
 
 <script>
 import Select from "../components/Select";
-import options from "@/assets/chartOptions.js";
 import Chart from "../components/Chart";
+import Loading from "../components/Loading";
+
+import options from "@/assets/chartOptions.js";
+
 export default {
     components: {
         Select,
         Chart,
+        Loading,
     },
     computed: {
         getData: function () {
@@ -119,6 +126,7 @@ export default {
                 this.countyList = [...countyList];
                 this.loadingCounties = false;
             } catch (error) {
+                console.log(error);
                 this.loadingCounties = false;
                 this.countiesError = true;
             }
@@ -147,7 +155,7 @@ export default {
                 this.loadingCounty = false;
             } catch (error) {
                 console.log(error);
-                this.loadingCounty = false;
+                this.loadingCounty = true;
                 this.countyError = true;
             }
         },

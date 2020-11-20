@@ -3,10 +3,10 @@
         <input
             type="text"
             v-model="searchInput"
-            placeholder="Enter location / company name"
+            :placeholder="placeholder"
             class="searchbar--input"
             aria-label="Search location or company name"
-            @input="inputChange"
+            @input="debounce(inputChange(), 500)"
             @keyup.enter="pressSearchButton"
         />
 
@@ -20,8 +20,7 @@
                 :key="val.code"
                 @click="searchClick(index)"
             >
-                {{ val.name ? val.name : val.symbol }} -
-                {{ !val.name && val.region }}
+                {{ val.name }} | {{ val.region }} | {{ val.exchange }}
             </li>
         </ul>
     </div>
@@ -29,6 +28,7 @@
 
 <script>
 import countries from "@/assets/countries";
+import db from "../main";
 // @group Components
 /**
  * Search bar for location and stock
@@ -41,6 +41,7 @@ export default {
             countries,
             suggestionItems: [],
             showSuggestion: false,
+            placeholder: "Search location or company name",
         };
     },
     computed: {
@@ -51,22 +52,8 @@ export default {
     methods: {
         inputChange: async function () {
             this.showSuggestion = true;
-            if (this.$route.name.includes("finance")) {
-                const resposne = await fetch(
-                    `https://sandbox.iexapis.com/stable/search/${this.searchInput}?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b`
-                );
-                const data = await resposne.json();
-                this.suggestionItems = data;
-                if (this.suggestionItems.length === 0) {
-                    this.suggestionItems = [
-                        {
-                            name: "Nothing found",
-                            code: "404",
-                        },
-                    ];
-                }
-                //this.suggestionItems = countries.filter(el =>el.name.contains(text));
-            } else if (this.searchInput === "") {
+            this.suggestionItems = [];
+            if (this.searchInput === "") {
                 this.showSuggestion = false;
                 this.suggestionItems = [
                     {
@@ -74,6 +61,23 @@ export default {
                         code: "404",
                     },
                 ];
+                //this.suggestionItems = countries.filter(el =>el.name.contains(text));
+            } else if (this.$route.name.includes("finance")) {
+                let stockRef = db.collection("stock");
+                let allCities = await stockRef
+                    .where(
+                        "keywordsBoth",
+                        "array-contains",
+                        this.searchInput.toLowerCase()
+                    )
+                    .limit(5)
+                    .get();
+                for (const doc of allCities.docs) {
+                    doc.data().keywordsBoth = [];
+                    doc.data().keywordsSymbol = [];
+                    doc.data().keywordsName = [];
+                    this.suggestionItems.push(doc.data());
+                }
             } else {
                 this.suggestionItems = countries.filter((el) =>
                     el.name
@@ -91,15 +95,15 @@ export default {
             }
         },
         searchStock(index) {
+            delete this.topFiveSuggestions[index].keywordsSymbol;
+            delete this.topFiveSuggestions[index].keywordsBoth;
+            delete this.topFiveSuggestions[index].keywordsName;
             if (this.searchInput != "") {
                 this.setlocalStorageValue(
                     "stockSymbol",
-                    this.topFiveSuggestions[index].symbol
+                    JSON.stringify(this.topFiveSuggestions[index])
                 );
-                this.$emit(
-                    "stockChange",
-                    this.topFiveSuggestions[index].symbol
-                );
+                this.$emit("stockChange", this.topFiveSuggestions[index]);
                 this.showSuggestion = false;
                 this.searchInput = "";
             }
@@ -116,7 +120,6 @@ export default {
         setlocalStorageValue(key, value) {
             localStorage.setItem(key, value);
         },
-
         pressSearchButton() {
             if (this.$route.name.includes("finance")) {
                 this.searchStock(0);
@@ -124,12 +127,43 @@ export default {
                 this.searchLocation(0);
             }
         },
-
         searchClick(index) {
             if (this.$route.name.includes("finance")) {
                 this.searchStock(index);
             } else {
                 this.searchLocation(index);
+            }
+        },
+        debounce(func, wait, immediate) {
+            var timeout;
+            return function () {
+                var context = this,
+                    args = arguments;
+                var later = function () {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        },
+    },
+    mounted() {
+        if (this.$route.name.includes("finance")) {
+            this.placeholder = "Search companies for stock";
+        } else {
+            this.placeholder = "Search countries";
+        }
+    },
+    watch: {
+        $route: function () {
+            this.searchInput = "";
+            if (this.$route.name.includes("finance")) {
+                this.placeholder = "Search companies for stock";
+            } else {
+                this.placeholder = "Search countries";
             }
         },
     },

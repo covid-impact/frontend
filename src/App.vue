@@ -57,7 +57,21 @@ export default {
                 name: "Canada",
                 number: "124",
             },
-            stockName: localStorage.getItem("stockSymbol") || "CCL",
+            stockName: JSON.parse(localStorage.getItem("stockSymbol")) || {
+                isEnabled: true,
+                name: "Apple Inc.",
+                cik: "320193",
+                type: "cs",
+                symbol: "AAPL",
+                region: "US",
+                currency: "USD",
+                exchange: "NAS",
+                queryableSymbol: "aapl",
+                iexId: "IEX_4D48333344362D52",
+                figi: "BBG000B9XRY4",
+                date: "2020-11-18",
+                queryable: "apple inc.",
+            },
         };
     },
     methods: {
@@ -88,8 +102,8 @@ export default {
 
 <style>
 html[data-theme="dark"] {
-    --background: #303030;
-    --background-secondary: #101010;
+    --background: #101010;
+    --background-secondary: #212121;
     --background-card: #000;
     --text: #fff;
     --text-menu: #fff;
@@ -102,13 +116,13 @@ html[data-theme="dark"] {
 
 html[data-theme="light"] {
     --background: #fff;
-    --background-secondary: rgb(220, 226, 255);
+    --background-secondary: #e3f2fd;
     --background-card: #fff;
     --text: #000;
     --text-menu: #000;
     --deaths: rgb(244, 67, 54);
-    --active: rgb(255, 235, 59);
-    --recovered: rgb(118, 255, 3);
+    --active: rgb(255, 233, 39);
+    --recovered: rgb(62, 255, 3);
     --cases: #000;
     --critical: rgb(255, 23, 68);
 }

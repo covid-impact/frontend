@@ -65,7 +65,7 @@
             </ul>
             <li class="menu--item--theme">
                 <div class="theme--switch">
-                    <h3>Light</h3>
+                    <span>Light</span>
                     <div class="theme--switch--toggle">
                         <input
                             @click="themeSwitch"
@@ -78,7 +78,7 @@
                         />
                         <span class="theme--switch--ball"></span>
                     </div>
-                    <h3>Dark</h3>
+                    <span>Dark</span>
                 </div>
             </li>
         </ul>
@@ -135,7 +135,7 @@
                 </ul>
                 <li class="menu--item--theme">
                     <div class="theme--switch">
-                        <h3>Light</h3>
+                        <span>Light</span>
                         <div class="theme--switch--toggle">
                             <input
                                 @click="themeSwitch"
@@ -148,7 +148,7 @@
                             />
                             <span class="theme--switch--ball"></span>
                         </div>
-                        <h3>Dark</h3>
+                        <span>Dark</span>
                     </div>
                 </li>
             </ul>
@@ -241,6 +241,7 @@ export default {
 }
 
 .menu--mobile {
+    position: absolute;
     display: none;
 }
 
@@ -267,7 +268,15 @@ export default {
 }
 
 .menu--item--theme {
-    margin-top: auto;
+    border-radius: 10px;
+    padding: 5px 5px;
+    border: 2px solid var(--text-menu);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s box-shadow, 0.2s transform;
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
 }
 
 .theme--switch {
@@ -315,7 +324,8 @@ export default {
 }
 
 @media not all and (hover: none) {
-    .menu--item:hover {
+    .menu--item:hover,
+    .menu--item--theme:hover {
         box-shadow: none;
         transform: translateY(2px);
     }
@@ -358,11 +368,7 @@ export default {
     }
 
     .sub--menu {
-        margin-left: 20px;
-    }
-
-    .menu--item {
-        width: 90%;
+        margin-left: auto;
     }
 }
 
@@ -403,11 +409,7 @@ export default {
     }
 
     .sub--menu {
-        margin-left: 20px;
-    }
-
-    .menu--item {
-        width: 90%;
+        margin-left: auto;
     }
 }
 </style>

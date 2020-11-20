@@ -2,15 +2,21 @@
     <section class="finance">
         <h1 class="main--heading">COVID-19 Impact</h1>
         <section class="country">
-            <h2 class="heading">{{ stockName }} v/s {{ country.name }}</h2>
+            <h2 class="heading">{{ stockName.name }} v/s {{ country.name }}</h2>
+            <Select
+                @newSelection="countryChange"
+                :default="country"
+                :data="countries"
+                placeholder="Select some other country"
+            />
         </section>
 
         <h1 v-if="historyDataStockError">
-            No historical stock data found for {{ stockName }}
+            No historical stock data found for {{ stockName.name }}
         </h1>
         <stock-chart
             v-else
-            :title="`${stockName} stock price`"
+            :title="`${stockName.name} |  ${stockName.region} | ${stockName.symbol} | ${stockName.exchange} stock price`"
             :data="dataStock"
         />
         <Select
@@ -41,6 +47,7 @@
 import StockChart from "../components/StockChart";
 import options from "@/assets/chartOptions.js";
 import Select from "../components/Select";
+import countries from "@/assets/countries.js";
 
 // @group Views
 /**
@@ -55,13 +62,28 @@ export default {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
         stockName: {
-            type: String,
+            type: Object,
             required: false,
-            deafult: () => "CCL",
+            deafult: () => ({
+                isEnabled: true,
+                name: "Apple Inc.",
+                cik: "320193",
+                type: "cs",
+                symbol: "AAPL",
+                region: "US",
+                currency: "USD",
+                exchange: "NAS",
+                queryableSymbol: "aapl",
+                iexId: "IEX_4D48333344362D52",
+                figi: "BBG000B9XRY4",
+                date: "2020-11-18",
+                queryable: "apple inc.",
+            }),
         },
     },
     data: function () {
         return {
+            countries,
             dataCovid: {},
             historyDataCovidError: false,
             historyDataStockError: false,
@@ -105,7 +127,6 @@ export default {
          * get the COVID-19 and stock market data
          */
         getData: async function (type) {
-            let datesAll = null;
             try {
                 this.historyDataCovidError = false;
                 let response;
@@ -155,23 +176,26 @@ export default {
                 ];
 
                 this.dataCovid = { ...this.options, series };
-                datesAll = dates;
             } catch (error) {
+                console.log(error);
                 this.historyDataCovidError = true;
             }
-
+        },
+        getStockData: async function () {
             try {
                 const responseFinance = await fetch(
-                    `https://sandbox.iexapis.com/stable/stock/${this.stockName}/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b`
+                    `https://sandbox.iexapis.com/stable/stock/${this.stockName.symbol}/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b`
                 );
                 const dataFinance = await responseFinance.json();
 
+                let dates = [];
                 let close = [];
                 let open = [];
                 let high = [];
                 let low = [];
 
                 dataFinance.forEach((element) => {
+                    dates.push(element.date);
                     close.push(element.close);
                     open.push(element.open);
                     high.push(element.high);
@@ -181,28 +205,29 @@ export default {
                 const series = [
                     {
                         name: "Open",
-                        data: this.zip(open, datesAll),
+                        data: this.zip(open, dates),
                         color: "green",
                     },
                     {
                         name: "Close",
-                        data: this.zip(close, datesAll),
+                        data: this.zip(close, dates),
                         color: "blue",
                     },
                     {
                         name: "High",
-                        data: this.zip(high, datesAll),
+                        data: this.zip(high, dates),
                         color: "yellow",
                     },
                     {
                         name: "Low",
-                        data: this.zip(low, datesAll),
+                        data: this.zip(low, dates),
                         color: "red",
                     },
                 ];
 
                 this.dataStock = { ...this.options, series };
             } catch (error) {
+                console.log(error);
                 this.historyDataStockError = true;
             }
         },
@@ -210,16 +235,21 @@ export default {
             this.stateSelected = country[1];
             this.getData("province");
         },
-    },
-    mounted() {
-        this.getData("country");
-    },
-    watch: {
-        theme: function () {
+        countryChange: function (country) {
+            this.country = country[0];
+            this.countryIndex = country[1];
+            localStorage.setItem("country", JSON.stringify(country[0]));
             this.getData("country");
         },
-        stockName: function () {
-            this.getData("country");
+    },
+    mounted: async function () {
+        await this.getData("country");
+        await this.getStockData();
+    },
+    watch: {
+        stockName: async function () {
+            await this.getData("country");
+            await this.getStockData();
         },
     },
 };

@@ -2,7 +2,7 @@
     <section class="finance">
         <h1 class="main--heading">COVID-19 Impact</h1>
         <section class="country">
-            <h2 class="heading">{{ stockName }} v/s World</h2>
+            <h2 class="heading">{{ stockName.name }} v/s World</h2>
         </section>
 
         <h1 v-if="historyDataStockError">
@@ -10,7 +10,7 @@
         </h1>
         <stock-chart
             v-else
-            :title="`${stockName} stock price`"
+            :title="`${stockName.name} |  ${stockName.region} | ${stockName.symbol} | ${stockName.exchange} stock price`"
             :data="dataStock"
         />
         <h1 v-if="historyDataCovidError">No historical covid data found</h1>
@@ -29,6 +29,25 @@ export default {
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
+        stockName: {
+            type: Object,
+            required: false,
+            deafult: () => ({
+                isEnabled: true,
+                name: "Apple Inc.",
+                cik: "320193",
+                type: "cs",
+                symbol: "AAPL",
+                region: "US",
+                currency: "USD",
+                exchange: "NAS",
+                queryableSymbol: "aapl",
+                iexId: "IEX_4D48333344362D52",
+                figi: "BBG000B9XRY4",
+                date: "2020-11-18",
+                queryable: "apple inc.",
+            }),
+        },
     },
     data: function () {
         return {
@@ -37,7 +56,6 @@ export default {
             historyDataStockError: false,
             dataStock: {},
             dates: {},
-            stockName: localStorage.getItem("stockSymbol") || "CCL",
             options: options[localStorage.getItem("theme") || "light"],
         };
     },
@@ -82,12 +100,13 @@ export default {
                 this.dataCovid = { ...this.options, series };
                 datesAll = dates;
             } catch (error) {
+                console.log(error);
                 this.historyDataCovidError = true;
             }
 
             try {
                 const responseFinance = await fetch(
-                    "https://sandbox.iexapis.com/stable/stock/CCL/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b"
+                    `https://sandbox.iexapis.com/stable/stock/${this.stockName.symbol}/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b`
                 );
                 const dataFinance = await responseFinance.json();
 
@@ -128,6 +147,7 @@ export default {
 
                 this.dataStock = { ...this.options, series };
             } catch (error) {
+                console.log(error);
                 this.historyDataStockError = true;
             }
         },

@@ -10,7 +10,7 @@
                 placeholder="Select some other country"
             /> -->
         </section>
-        <h2 v-if="loadingCountry">Loading...</h2>
+        <Loading v-if="loadingCountry" />
         <ul v-else class="info--list">
             <li class="info--list--item cases">
                 <h3 class="info--list--item--head">Cases</h3>
@@ -75,7 +75,7 @@
                     : states[stateSelected]
             }`"
         />
-        <h2 v-if="loadingHistorical">Loading...</h2>
+        <Loading v-if="loadingHistorical" />
         <h2 v-else-if="historyDataCovidError">No historical data found</h2>
         <Chart
             v-else
@@ -93,6 +93,7 @@
 import countries from "@/assets/countries";
 import Chart from "../components/Chart";
 import Select from "../components/Select";
+import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
 
 // @group Views
@@ -103,6 +104,7 @@ export default {
     components: {
         Chart,
         Select,
+        Loading,
     },
     props: {
         // The theme for the page
@@ -215,6 +217,7 @@ export default {
 
                 // console.log(this.dataCovid);
             } catch (error) {
+                console.log(error);
                 this.loadingHistorical = false;
                 this.historyDataCovidError = true;
             }
@@ -298,6 +301,7 @@ export default {
     margin: 5px;
     border-radius: 10px;
     background: var(--background-card);
+    transition: 0.2s box-shadow, 0.2s transform;
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06);
     margin: 10px;
@@ -334,6 +338,15 @@ export default {
 
 .info--list--item--number {
     font-size: 3em;
+}
+
+@media not all and (hover: none) {
+    .info--list--item:hover {
+        box-shadow: none;
+        transform: translateY(2px) perspective(100em) rotateX(10deg);
+        text-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+            0 6.7px 5.3px rgba(0, 0, 0, 0.116);
+    }
 }
 
 @media (max-width: 1199.98px) {
