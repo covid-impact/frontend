@@ -1,0 +1,46 @@
+<!DOCTYPE >
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <title>COVID Finance</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/docute@4/dist/docute.css"
+        />
+    </head>
+    <body>
+        <div id="docute"></div>
+        <script src="https://cdn.jsdelivr.net/npm/docute@4/dist/docute.js"></script>
+        <script>
+            new Docute({
+                target: "#docute",
+                sidebar: JSON.parse(
+                    "[{&#34;title&#34;:&#34;Components&#34;,&#34;links&#34;:[{&#34;title&#34;:&#34;Chart&#34;,&#34;link&#34;:&#34;/components/Chart&#34;},{&#34;title&#34;:&#34;Menu&#34;,&#34;link&#34;:&#34;/components/Menu&#34;},{&#34;title&#34;:&#34;Search&#34;,&#34;link&#34;:&#34;/components/Search&#34;},{&#34;title&#34;:&#34;Select&#34;,&#34;link&#34;:&#34;/components/Select&#34;}]},{&#34;title&#34;:&#34;Home&#34;,&#34;links&#34;:[{&#34;title&#34;:&#34;App&#34;,&#34;link&#34;:&#34;/components/App&#34;}]},{&#34;title&#34;:&#34;Views&#34;,&#34;links&#34;:[{&#34;title&#34;:&#34;Home&#34;,&#34;link&#34;:&#34;/components/Home&#34;}]}]".replace(
+                        /\&\#34\;/g,
+                        '"'
+                    )
+                ),
+                nav: [
+                    {
+                        title: "Home",
+                        link: "/",
+                    },
+                    {
+                        title: "GitHub",
+                        link: "https://github.com/covid-impact/frontend",
+                    },
+                    {
+                        title: "Getting Started",
+                        link: "/getting-started",
+                    },
+                ],
+                theme: "dark",
+                detectSystemDarkTheme: true,
+            });
+        </script>
+    </body>
+</html>
