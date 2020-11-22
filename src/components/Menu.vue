@@ -64,11 +64,14 @@
                 >
               
             </ul>
-          <router-link tag="li" class="menu--item" :to="{ name: 'login' }"
+          <router-link v-if="loggedIn" tag="li" class="menu--item" :to="{ name: 'login' }"
                 >Login</router-link
             >
-          <router-link tag="li" class="menu--item"  :to="{ name: 'register' }"
+          <router-link v-if="loggedIn" tag="li" class="menu--item"  :to="{ name: 'register' }"
                 >Register</router-link
+            >
+          <router-link v-else="" tag="li" class="menu--item" :to="{ name: 'home' }" v-on:click.native="signOut"
+                >Sign out</router-link
             >
             <li class="menu--item--theme">
                 <div class="theme--switch">
@@ -164,15 +167,22 @@
 </template>
 
 <script>
+import { firebase } from "@firebase/app";
+import "@firebase/auth";
+
 // @group Components
 /**
  * Menu for the page
  */
 export default {
+  mounted() {
+    this.setupFirebase();
+  },
     data: function () {
         return {
             showMenu: false,
             themeDark: false,
+            loggedIn: false,
         };
     },
     methods: {
@@ -182,6 +192,25 @@ export default {
          */
         menuToggle: function () {
             this.showMenu = !this.showMenu;
+        },
+        setupFirebase() {
+          firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+              // User is signed in.
+              this.loggedIn = true;
+            } else {
+              // No user is signed in.
+              this.loggedIn = false;
+            }
+          });
+        },
+       signOut() {
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            alert("Signed out");
+          });
         },
         /**
          * @vuese

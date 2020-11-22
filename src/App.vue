@@ -1,8 +1,5 @@
 <template>
   <div class="app">
-    <section class="signout-btn">
-      <top-header></top-header>
-    </section>
     <section class="logo">
       <router-link
           :to="{ name: 'home' }"
@@ -41,7 +38,6 @@
 <script>
 import Menu from "./components/Menu";
 import Search from "./components/Search";
-import TopHeader from "./components/Top-Header";
 
 // @vuese
 //@group Home
@@ -53,7 +49,6 @@ export default {
     components: {
         Menu,
         Search,
-        TopHeader,
     },
     data: function () {
         return {
