@@ -1,6 +1,8 @@
 <template>
   <div class="app">
-    <top-header></top-header>
+    <section class="signout-btn">
+      <top-header></top-header>
+    </section>
     <section class="logo">
       <router-link
           :to="{ name: 'home' }"
