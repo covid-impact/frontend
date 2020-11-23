@@ -27,7 +27,7 @@ import "@firebase/auth";
         return {
           email: "",
           password: "",
-          error: ""
+          error: "",
         };
       },
       methods: {
@@ -37,7 +37,7 @@ import "@firebase/auth";
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(() => {
           alert("Succesfully Registered!");
-          this.$router.replace({ name: "login" });
+          this.$router.replace({ name: "home" });
         })
         .catch(error => {
           alert(error);
