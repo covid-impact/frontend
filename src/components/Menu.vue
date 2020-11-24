@@ -82,7 +82,7 @@
                 tag="li"
                 class="menu--item"
                 :to="{ name: 'user' }"
-                >User</router-link
+                >Profile</router-link
             >
             <li v-if="!loggedIn" class="menu--item" v-on:click="signOut">
                 Sign out
