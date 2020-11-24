@@ -66,6 +66,9 @@ const router = new Router({
             name: "login",
             component: () =>
                 import(/* webpackChunkName: "login" */ "./views/Login.vue"),
+            meta: {
+                layout: "basic",
+            },
         },
         {
             path: "/register",
@@ -74,6 +77,9 @@ const router = new Router({
                 import(
                     /* webpackChunkName: "register" */ "./views/Register.vue"
                 ),
+            meta: {
+                layout: "basic",
+            },
         },
         {
             path: "/user",
