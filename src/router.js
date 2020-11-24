@@ -1,12 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import Login from "./views/Login.vue"
-import Register from "./views/Register.vue"
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     mode: "history",
     routes: [
         {
@@ -66,12 +64,24 @@ export default new Router({
         {
             path: "/login",
             name: "login",
-            component: Login,
+            component: () =>
+                import(/* webpackChunkName: "login" */ "./views/Login.vue"),
         },
         {
             path: "/register",
             name: "register",
-            component: Register,
+            component: () =>
+                import(
+                    /* webpackChunkName: "register" */ "./views/Register.vue"
+                ),
+        },
+        {
+            path: "/user",
+            name: "user",
+            component: () =>
+                import(/* webpackChunkName: "user" */ "./views/User.vue"),
         },
     ],
 });
+
+export default router;

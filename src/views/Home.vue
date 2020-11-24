@@ -95,6 +95,8 @@ import Chart from "../components/Chart";
 import Select from "../components/Select";
 import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
+import { firebase } from "@firebase/app";
+import "@firebase/auth";
 
 // @group Views
 /**

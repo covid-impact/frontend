@@ -6,7 +6,7 @@
             :placeholder="placeholder"
             class="searchbar--input"
             aria-label="Search location or company name"
-            @input="debounce(inputChange(), 500)"
+            @input="debounce(inputChange(), 250)"
             @keyup.enter="pressSearchButton"
         />
 
@@ -14,13 +14,14 @@
             Search
         </button>
         <ul v-if="showSuggestion" class="search--suggestion--list">
+            <li v-if="loading"><loading /></li>
             <li
                 class="select--list--item"
                 v-for="(val, index) in topFiveSuggestions"
                 :key="val.code"
                 @click="searchClick(index)"
             >
-                {{ val.name }} | {{ val.region }} | {{ val.exchange }}
+                {{ li(val) }}
             </li>
         </ul>
     </div>
@@ -28,6 +29,7 @@
 
 <script>
 import countries from "@/assets/countries";
+import Loading from "../components/Loading";
 import db from "../main";
 // @group Components
 /**
@@ -35,6 +37,10 @@ import db from "../main";
  */
 export default {
     name: "Search",
+    components: {
+        Loading,
+    },
+
     data: function () {
         return {
             searchInput: "",
@@ -42,6 +48,7 @@ export default {
             suggestionItems: [],
             showSuggestion: false,
             placeholder: "Search location or company name",
+            loading: false,
         };
     },
     computed: {
@@ -50,6 +57,13 @@ export default {
         },
     },
     methods: {
+        li: function (val) {
+            if (this.$route.name.includes("finance")) {
+                return `${val.name} | ${val.region} | ${val.exchange}`;
+            } else {
+                return val.name;
+            }
+        },
         inputChange: async function () {
             this.showSuggestion = true;
             this.suggestionItems = [];
@@ -63,6 +77,7 @@ export default {
                 ];
                 //this.suggestionItems = countries.filter(el =>el.name.contains(text));
             } else if (this.$route.name.includes("finance")) {
+                this.loading = true;
                 let stockRef = db.collection("stock");
                 let allCities = await stockRef
                     .where(
@@ -78,6 +93,7 @@ export default {
                     doc.data().keywordsName = [];
                     this.suggestionItems.push(doc.data());
                 }
+                this.loading = false;
             } else {
                 this.suggestionItems = countries.filter((el) =>
                     el.name
@@ -151,7 +167,7 @@ export default {
         },
     },
     mounted() {
-        if (this.$route.name.includes("finance")) {
+        if (this.$route.name !== null && this.$route.name.includes("finance")) {
             this.placeholder = "Search companies for stock";
         } else {
             this.placeholder = "Search countries";
@@ -160,6 +176,7 @@ export default {
     watch: {
         $route: function () {
             this.searchInput = "";
+            (this.showSuggestion = false), (this.suggestionItems = []);
             if (this.$route.name.includes("finance")) {
                 this.placeholder = "Search companies for stock";
             } else {
@@ -255,7 +272,7 @@ export default {
         box-shadow: none;
         transform: translateY(2px);
     }
-    
+
     .signout--btn:hover {
         box-shadow: none;
         transform: translateY(2px);

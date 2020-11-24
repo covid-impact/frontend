@@ -1,38 +1,37 @@
 <template>
-  <div class="app">
-    <section class="logo">
-      <router-link
-          :to="{ name: 'home' }"
-          v-slot="{ href, navigate, isActive, isExactActive }"
+    <div class="app">
+        <section class="logo">
+            <router-link
+                :to="{ name: 'home' }"
+                v-slot="{ href, navigate, isActive, isExactActive }"
             >
-        <a
-            :class="[isActive && '', isExactActive && '', 'logo--link']"
-            :href="href"
-            @click="navigate"
+                <a
+                    :class="[isActive && '', isExactActive && '', 'logo--link']"
+                    :href="href"
+                    @click="navigate"
                 >
-          <h1>CF</h1>
-        </a
-                >
-      </router-link>
-    </section>
-    <Menu @themeChange="themeChange" />
-    <section class="search-bar">
-      <Search
-          @countryChange="countryChange"
-          @stockChange="stockChange"
+                    <h1>CF</h1>
+                </a>
+            </router-link>
+        </section>
+        <Menu @themeChange="themeChange" />
+        <section class="search-bar">
+            <Search
+                @countryChange="countryChange"
+                @stockChange="stockChange"
             ></Search>
-    </section>
-    <section class="main">
-      <transition name="slide-down" mode="out-in">
-        <router-view
-            :theme="theme"
-            :country="country"
-            :stockName="stockName"
-            :key="$route.path"
+        </section>
+        <section class="main">
+            <transition name="slide-down" mode="out-in">
+                <router-view
+                    :theme="theme"
+                    :country="country"
+                    :stockName="stockName"
+                    :key="$route.path"
                 />
-      </transition>
-    </section>
-  </div>
+            </transition>
+        </section>
+    </div>
 </template>
 
 <script>
