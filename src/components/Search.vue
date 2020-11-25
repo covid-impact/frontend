@@ -149,22 +149,21 @@ export default {
                 if (callNow) func.apply(context, args);
             };
         },
+        changePlaceholderText(){
+          if (this.$route.name.includes("finance")){
+            this.placeholder = "Search companies for stock";
+          } else {
+            this.placeholder = "Search countries";
+          }
+        }
     },
     mounted() {
-        if (this.$route.name.includes("finance")) {
-            this.placeholder = "Search companies for stock";
-        } else {
-            this.placeholder = "Search countries";
-        }
+        this.changePlaceholderText();
     },
     watch: {
         $route: function () {
             this.searchInput = "";
-            if (this.$route.name.includes("finance")) {
-                this.placeholder = "Search companies for stock";
-            } else {
-                this.placeholder = "Search countries";
-            }
+            this.changePlaceholderText();
         },
     },
 };
