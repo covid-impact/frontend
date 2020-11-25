@@ -10,6 +10,7 @@
                 placeholder="Select some other country"
             /> -->
         </section>
+        <h1 @click="addToFav">Add to fav</h1>
         <Loading v-if="loadingCountry" />
         <ul v-else class="info--list">
             <li class="info--list--item cases">
@@ -95,6 +96,7 @@ import Chart from "../components/Chart";
 import Select from "../components/Select";
 import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
+import db from "../main";
 import { firebase } from "@firebase/app";
 import "@firebase/auth";
 
@@ -160,6 +162,19 @@ export default {
     },
     methods: {
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
+        addToFav: function () {
+            const user = firebase.auth().currentUser;
+            console.log(user);
+            const ref = db.collection("users").doc(user.uid);
+
+            ref.update({
+                favorites: firebase.firestore.FieldValue.arrayUnion({
+                    type: "conutry",
+                    route: this.$route.name,
+                    country: this.country,
+                }),
+            });
+        },
         /**
          * @vuese
          * Gets the historical covid data for the user selected country.

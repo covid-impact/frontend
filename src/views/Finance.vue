@@ -1,6 +1,8 @@
 <template>
     <section class="finance">
         <h1 class="main--heading">COVID-19 Impact</h1>
+
+        <h1 @click="addToFav">Add to fav</h1>
         <section class="country">
             <h2 class="heading">{{ stockName.name }} v/s {{ country.name }}</h2>
             <Select
@@ -48,6 +50,9 @@ import StockChart from "../components/StockChart";
 import options from "@/assets/chartOptions.js";
 import Select from "../components/Select";
 import countries from "@/assets/countries.js";
+import db from "../main";
+import { firebase } from "@firebase/app";
+import "@firebase/auth";
 
 // @group Views
 /**
@@ -122,6 +127,20 @@ export default {
     },
     methods: {
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
+        addToFav: function () {
+            const user = firebase.auth().currentUser;
+            console.log(user);
+            const ref = db.collection("users").doc(user.uid);
+
+            ref.update({
+                favorites: firebase.firestore.FieldValue.arrayUnion({
+                    type: "finance",
+                    route: this.$route.name,
+                    country: this.country,
+                    stockName: this.stockName,
+                }),
+            });
+        },
         /**
          * @vuese
          * get the COVID-19 and stock market data

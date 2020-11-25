@@ -21,6 +21,16 @@
                 placeholder="Password"
             />
         </div>
+        <div class="form--element">
+            <label for="Password" class="label">Name</label>
+            <input
+                id="name"
+                type="text"
+                placeholder="Full Name"
+                v-model="name"
+                class="input"
+            />
+        </div>
         <input class="submit--btn" type="submit" value="Register" id="submit" />
     </form>
 </template>
@@ -28,11 +38,13 @@
 <script>
 import { firebase } from "@firebase/app";
 import "@firebase/auth";
+import db from "../main";
 export default {
     data() {
         return {
             email: "",
             password: "",
+            name: "",
             error: "",
         };
     },
@@ -41,12 +53,17 @@ export default {
             firebase
                 .auth()
                 .createUserWithEmailAndPassword(this.email, this.password)
-                .then(() => {
-                    alert("Succesfully Registered!");
+                .then((user) => {
+                    console.log(user);
+                    var ref = db.collection("users").doc(user.user.uid);
+                    ref.set({
+                        name: this.name,
+                        favorites: [],
+                    });
                     this.$router.replace({ name: "home" });
                 })
                 .catch((error) => {
-                    alert(error);
+                    this.error = error.message;
                 });
         },
     },
