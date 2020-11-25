@@ -85,7 +85,11 @@ const router = new Router({
             path: "/user",
             name: "user",
             component: () =>
-                import(/* webpackChunkName: "user" */ "./views/User.vue"),
+                import(/* webpackChunkName: "user" */ "./views/User.vue"
+                ),
+            meta: {
+                layout: "basic",
+            }
         },
     ],
 });
