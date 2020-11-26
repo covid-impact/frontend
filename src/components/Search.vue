@@ -62,7 +62,7 @@ export default {
                     },
                 ];
                 //this.suggestionItems = countries.filter(el =>el.name.contains(text));
-            } else if (this.$route.name.includes("finance")) {
+            } else if (this.routeInclude()) {
                 let stockRef = db.collection("stock");
                 let allCities = await stockRef
                     .where(
@@ -121,14 +121,14 @@ export default {
             localStorage.setItem(key, value);
         },
         pressSearchButton() {
-            if (this.$route.name.includes("finance")) {
+            if (this.routeInclude()) {
                 this.searchStock(0);
             } else {
                 this.searchLocation(0);
             }
         },
         searchClick(index) {
-            if (this.$route.name.includes("finance")) {
+            if (this.routeInclude()) {
                 this.searchStock(index);
             } else {
                 this.searchLocation(index);
@@ -150,12 +150,15 @@ export default {
             };
         },
         changePlaceholderText(){
-          if (this.$route.name.includes("finance")){
+          if (this.routeInclude()){
             this.placeholder = "Search companies for stock";
           } else {
             this.placeholder = "Search countries";
           }
-        }
+        },
+        routeInclude(){
+          return this.$route.name.includes("finance");
+        },
     },
     mounted() {
         this.changePlaceholderText();
