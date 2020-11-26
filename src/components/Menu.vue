@@ -63,6 +63,30 @@
                     >City</router-link
                 >
             </ul>
+            <router-link
+                v-if="loggedIn"
+                tag="li"
+                class="menu--item"
+                :to="{ name: 'login' }"
+                >Login</router-link
+            >
+            <router-link
+                v-if="loggedIn"
+                tag="li"
+                class="menu--item"
+                :to="{ name: 'register' }"
+                >Register</router-link
+            >
+            <router-link
+                v-if="!loggedIn"
+                tag="li"
+                class="menu--item"
+                :to="{ name: 'user' }"
+                >Profile</router-link
+            >
+            <li v-if="!loggedIn" class="menu--item" v-on:click="signOut">
+                Sign out
+            </li>
             <li class="menu--item--theme">
                 <div class="theme--switch">
                     <span>Light</span>
@@ -133,6 +157,30 @@
                         >City</router-link
                     >
                 </ul>
+                <router-link
+                    v-if="loggedIn"
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'login' }"
+                    >Login</router-link
+                >
+                <router-link
+                    v-if="loggedIn"
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'register' }"
+                    >Register</router-link
+                >
+                <router-link
+                    v-if="!loggedIn"
+                    tag="li"
+                    class="menu--item"
+                    :to="{ name: 'user' }"
+                    >User</router-link
+                >
+                <li v-if="!loggedIn" class="menu--item" v-on:click="signOut">
+                    Sign out
+                </li>
                 <li class="menu--item--theme">
                     <div class="theme--switch">
                         <span>Light</span>
@@ -157,15 +205,22 @@
 </template>
 
 <script>
+import { firebase } from "@firebase/app";
+import "@firebase/auth";
+
 // @group Components
 /**
  * Menu for the page
  */
 export default {
+    mounted() {
+        this.setupFirebase();
+    },
     data: function () {
         return {
             showMenu: false,
             themeDark: false,
+            loggedIn: false,
         };
     },
     methods: {
@@ -175,6 +230,26 @@ export default {
          */
         menuToggle: function () {
             this.showMenu = !this.showMenu;
+        },
+        setupFirebase() {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (!user) {
+                    // User is signed in.
+                    this.loggedIn = true;
+                } else {
+                    // No user is signed in.
+                    this.loggedIn = false;
+                }
+            });
+        },
+        signOut() {
+            firebase
+                .auth()
+                .signOut()
+                .then(() => {
+                    alert("Signed out");
+                    this.$router.replace({ name: "home" });
+                });
         },
         /**
          * @vuese

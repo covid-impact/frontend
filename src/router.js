@@ -4,7 +4,7 @@ import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     mode: "history",
     routes: [
         {
@@ -61,5 +61,37 @@ export default new Router({
                     /* webpackChunkName: "financeCity" */ "./views/FinanceCity.vue"
                 ),
         },
+        {
+            path: "/login",
+            name: "login",
+            component: () =>
+                import(/* webpackChunkName: "login" */ "./views/Login.vue"),
+            meta: {
+                layout: "basic",
+            },
+        },
+        {
+            path: "/register",
+            name: "register",
+            component: () =>
+                import(
+                    /* webpackChunkName: "register" */ "./views/Register.vue"
+                ),
+            meta: {
+                layout: "basic",
+            },
+        },
+        {
+            path: "/user",
+            name: "user",
+            component: () =>
+                import(/* webpackChunkName: "user" */ "./views/User.vue"
+                ),
+            meta: {
+                layout: "basic",
+            }
+        },
     ],
 });
+
+export default router;

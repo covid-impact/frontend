@@ -1,42 +1,22 @@
 <template>
     <div class="app">
-        <section class="logo">
-            <router-link
-                :to="{ name: 'home' }"
-                v-slot="{ href, navigate, isActive, isExactActive }"
-            >
-                <a
-                    :class="[isActive && '', isExactActive && '', 'logo--link']"
-                    :href="href"
-                    @click="navigate"
-                >
-                    <h1>CF</h1></a
-                >
-            </router-link>
-        </section>
-        <Menu @themeChange="themeChange" />
-        <section class="search-bar">
-            <Search
-                @countryChange="countryChange"
-                @stockChange="stockChange"
-            ></Search>
-        </section>
-        <section class="main">
-            <transition name="slide-down" mode="out-in">
-                <router-view
-                    :theme="theme"
-                    :country="country"
-                    :stockName="stockName"
-                    :key="$route.path"
-                />
-            </transition>
-        </section>
+        <component :is="layout">
+            <router-view
+                :theme="theme"
+                :country="country"
+                :stockName="stockName"
+                :key="$route.path"
+            />
+        </component>
     </div>
 </template>
 
 <script>
-import Menu from "./components/Menu";
-import Search from "./components/Search";
+import Default from "./layouts/Default";
+import Basic from "./layouts/Basic";
+
+const defaultLayout = "default";
+
 // @vuese
 //@group Home
 /**
@@ -45,8 +25,13 @@ import Search from "./components/Search";
 export default {
     name: "App",
     components: {
-        Menu,
-        Search,
+        "default-layout": Default,
+        "basic-layout": Basic,
+    },
+    computed: {
+        layout: function () {
+            return (this.$route.meta.layout || defaultLayout) + "-layout";
+        },
     },
     data: function () {
         return {
@@ -171,95 +156,5 @@ body {
 
 .app {
     width: 100%;
-    height: 100%;
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 10% 90%;
-    grid-template-rows: 100px 1fr;
-    grid-template-areas:
-        "logo search"
-        "menu main";
-}
-
-.logo {
-    font-size: 3em;
-    grid-area: logo;
-    padding: 20px 15px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    background: var(--background-secondary);
-}
-
-.logo--link,
-.logo--link:active,
-.logo--link:visited,
-.logo--link:hover {
-    color: var(--text-menu);
-    text-decoration: none;
-}
-
-.search-bar {
-    width: 100%;
-    grid-area: search;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-}
-
-.main {
-    grid-area: main;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 100%;
-}
-
-@media (max-width: 1659.98px) {
-    .app {
-        grid-template-columns: 15% 85%;
-        grid-template-rows: 100px 1fr;
-    }
-}
-
-@media (max-width: 1199.98px) {
-}
-
-@media (max-width: 991.98px) {
-    .app {
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        grid-template-rows: max-content max-content 1fr;
-        grid-template-areas:
-            "logo menu"
-            "search search"
-            "main main";
-    }
-
-    .logo {
-        font-size: 2.3em;
-    }
-}
-
-@media (max-width: 767.98px) {
-}
-
-@media (max-width: 575.98px) {
-    .app {
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        grid-template-rows: max-content max-content 1fr;
-        grid-template-areas:
-            "logo menu"
-            "search search"
-            "main main";
-    }
-
-    .logo {
-        font-size: 2.3em;
-        padding: 10px 5px;
-    }
 }
 </style>
