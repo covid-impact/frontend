@@ -48,6 +48,7 @@ export default {
             this.$emit("themeChange", localStorage.getItem("theme"));
         },
         countryChange: function (conutry) {
+            console.log("here");
             this.$emit("countryChange", conutry);
         },
         stockChange: function (stockName) {

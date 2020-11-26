@@ -1,6 +1,10 @@
 <template>
     <div class="app">
-        <component :is="layout">
+        <component
+            @countryChange="countryChange"
+            @stockChange="stockChange"
+            :is="layout"
+        >
             <router-view
                 :theme="theme"
                 :country="country"

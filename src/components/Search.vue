@@ -147,6 +147,7 @@ export default {
             if (this.$route.name.includes("finance")) {
                 this.searchStock(index);
             } else {
+                console.log("object");
                 this.searchLocation(index);
             }
         },

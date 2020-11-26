@@ -9,8 +9,22 @@
                 @newSelection="countryChange"
                 placeholder="Select some other country"
             /> -->
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="fav--icon ionicon"
+                viewBox="0 0 512 512"
+                :class="isFav ? 'fav--icon--fav' : 'fav--icon--not--fav'"
+                @click="addToFav"
+            >
+                <title>Favorite</title>
+                <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    stroke="currentColor"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                />
+            </svg>
         </section>
-        <h1 @click="addToFav">Add to fav</h1>
         <Loading v-if="loadingCountry" />
         <ul v-else class="info--list">
             <li class="info--list--item cases">
@@ -139,6 +153,8 @@ export default {
             displaying: "country",
             countryIndex: null,
             countryCOVIDData: {},
+            isFav: false,
+            id: "",
         };
     },
     computed: {
@@ -162,18 +178,59 @@ export default {
     },
     methods: {
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
-        addToFav: function () {
-            const user = firebase.auth().currentUser;
-            console.log(user);
-            const ref = db.collection("users").doc(user.uid);
-
-            ref.update({
-                favorites: firebase.firestore.FieldValue.arrayUnion({
-                    type: "conutry",
-                    route: this.$route.name,
-                    country: this.country,
-                }),
+        checkAuthStatus: function () {
+            return new Promise((resolve, reject) => {
+                try {
+                    firebase.auth().onAuthStateChanged((user) => resolve(user));
+                } catch (err) {
+                    reject(err);
+                }
             });
+        },
+        addToFav: function () {
+            if (!this.isFav) {
+                const user = firebase.auth().currentUser;
+                console.log(user);
+                const ref = db.collection("users").doc(user.uid);
+                try {
+                    ref.update({
+                        favorites: firebase.firestore.FieldValue.arrayUnion({
+                            id: user.uid,
+                            type: "country",
+                            route: this.$route.name,
+                            country: this.country,
+                        }),
+                    });
+
+                    this.isFav = true;
+                } catch (error) {
+                    this.isFav = false;
+                }
+            }
+        },
+        checkFav: async function () {
+            const ref = db.collection("users");
+            const fav = {
+                id: this.id,
+                type: "country",
+                route: this.$route.name,
+                country: this.country,
+            };
+            let favs = await ref
+                .where("favorites", "array-contains", fav)
+                .get();
+            let allFavs = [];
+            for (const doc of favs.docs) {
+                doc.data().keywordsBoth = [];
+                doc.data().keywordsSymbol = [];
+                doc.data().keywordsName = [];
+                allFavs.push(doc.data());
+            }
+            if (allFavs.length === 1) {
+                this.isFav = true;
+            } else {
+                this.isFav = false;
+            }
         },
         /**
          * @vuese
@@ -268,9 +325,16 @@ export default {
             this.loadingCountry = false;
         },
     },
-    mounted() {
+    async mounted() {
         this.getData("country");
         this.getConutryData();
+        let user = await this.checkAuthStatus();
+        if (user) {
+            this.id = user.uid;
+        } else {
+            this.id = "";
+        }
+        this.checkFav();
     },
     watch: {
         theme: function () {
@@ -355,6 +419,20 @@ export default {
 
 .info--list--item--number {
     font-size: 3em;
+}
+
+.fav--icon {
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.fav--icon--fav {
+    fill: yellow;
+}
+
+.fav--icon--not--fav {
+    fill: transparent;
 }
 
 @media not all and (hover: none) {
