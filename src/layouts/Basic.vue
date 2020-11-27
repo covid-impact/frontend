@@ -17,7 +17,10 @@
         <Menu @themeChange="themeChange" />
         <section class="main">
             <transition name="slide-down" mode="out-in">
-                <slot />
+                <slot
+                    @countryChange="countryChange"
+                    @stockChange="stockChange"
+                />
             </transition>
         </section>
     </div>
@@ -38,6 +41,13 @@ export default {
          */
         themeChange: function (theme) {
             this.$emit("themeChange", localStorage.getItem("theme"));
+        },
+        countryChange: function (conutry) {
+            console.log("here");
+            this.$emit("countryChange", conutry);
+        },
+        stockChange: function (stockName) {
+            this.$emit("stockChange", stockName);
         },
     },
 };

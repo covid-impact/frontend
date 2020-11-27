@@ -87,7 +87,7 @@
             <li v-if="!loggedIn" class="menu--item" v-on:click="signOut">
                 Sign out
             </li>
-            <li class="menu--item--theme">
+            <li class="menu--item menu--item--theme">
                 <div class="theme--switch">
                     <span>Light</span>
                     <div class="theme--switch--toggle">
@@ -181,7 +181,7 @@
                 <li v-if="!loggedIn" class="menu--item" v-on:click="signOut">
                     Sign out
                 </li>
-                <li class="menu--item--theme">
+                <li class="menu--item menu--item--theme">
                     <div class="theme--switch">
                         <span>Light</span>
                         <div class="theme--switch--toggle">
@@ -347,6 +347,7 @@ export default {
     padding: 5px 5px;
     border: 2px solid var(--text-menu);
     display: flex;
+    font-size: 1.1em;
     align-items: center;
     justify-content: center;
     transition: 0.2s box-shadow, 0.2s transform;

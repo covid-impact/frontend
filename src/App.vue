@@ -72,8 +72,9 @@ export default {
         themeChange: function (theme) {
             this.theme = theme;
         },
-        countryChange: function (conutry) {
-            this.country = conutry;
+        countryChange: function (country) {
+            console.log(country);
+            this.country = country;
         },
         stockChange: function (stockName) {
             this.stockName = stockName;

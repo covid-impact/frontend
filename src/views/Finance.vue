@@ -1,10 +1,23 @@
 <template>
     <section class="finance">
         <h1 class="main--heading">COVID-19 Impact</h1>
-
-        <h1 @click="addToFav">Add to fav</h1>
         <section class="country">
             <h2 class="heading">{{ stockName.name }} v/s {{ country.name }}</h2>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="fav--icon ionicon"
+                viewBox="0 0 512 512"
+                :class="isFav ? 'fav--icon--fav' : 'fav--icon--not--fav'"
+                @click="addToFav"
+            >
+                <title>Favorite</title>
+                <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    stroke="currentColor"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                />
+            </svg>
             <Select
                 @newSelection="countryChange"
                 :default="country"
@@ -104,6 +117,8 @@ export default {
             displaying: "country",
             states: localStorage.getItem("states") || "mainland",
             stateSelected: null,
+            isFav: false,
+            id: "",
         };
     },
     computed: {
@@ -127,19 +142,78 @@ export default {
     },
     methods: {
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
-        addToFav: function () {
-            const user = firebase.auth().currentUser;
-            console.log(user);
-            const ref = db.collection("users").doc(user.uid);
-
-            ref.update({
-                favorites: firebase.firestore.FieldValue.arrayUnion({
-                    type: "finance",
-                    route: this.$route.name,
-                    country: this.country,
-                    stockName: this.stockName,
-                }),
+        checkAuthStatus: function () {
+            return new Promise((resolve, reject) => {
+                try {
+                    firebase.auth().onAuthStateChanged((user) => resolve(user));
+                } catch (err) {
+                    reject(err);
+                }
             });
+        },
+        addToFav: function () {
+            const ref = db.collection("users").doc(this.id);
+            if (!this.isFav) {
+                try {
+                    ref.update({
+                        favorites: firebase.firestore.FieldValue.arrayUnion({
+                            id: this.id,
+                            type: "finance",
+                            route: this.$route.name,
+                            country: this.country,
+                            stockName: this.stockName,
+                        }),
+                    });
+
+                    this.isFav = true;
+                } catch (error) {
+                    this.isFav = false;
+                }
+            } else {
+                try {
+                    ref.update({
+                        favorites: firebase.firestore.FieldValue.arrayRemove({
+                            id: this.id,
+                            type: "finance",
+                            route: this.$route.name,
+                            country: this.country,
+                            stockName: this.stockName,
+                        }),
+                    });
+                    this.isFav = false;
+                } catch (error) {
+                    this.isFav = true;
+                }
+            }
+        },
+        checkFav: async function () {
+            const ref = db.collection("users");
+            const fav = {
+                id: this.id,
+                type: "finance",
+                route: this.$route.name,
+                country: this.country,
+                stockName: this.stockName,
+            };
+            console.log(fav);
+            try {
+                let favs = await ref
+                    .where("favorites", "array-contains", fav)
+                    .get();
+                let allFavs = [];
+                console.log(favs.docs[0].data());
+                for (const doc of favs.docs) {
+                    allFavs.push(doc.data());
+                }
+                if (allFavs.length === 1) {
+                    this.isFav = true;
+                } else {
+                    this.isFav = false;
+                }
+            } catch (error) {
+                console.log(error);
+                this.isFav = false;
+            }
         },
         /**
          * @vuese
@@ -258,17 +332,29 @@ export default {
             this.country = country[0];
             this.countryIndex = country[1];
             localStorage.setItem("country", JSON.stringify(country[0]));
+            this.checkFav();
             this.getData("country");
         },
     },
     mounted: async function () {
+        let user = await this.checkAuthStatus();
+        if (user) {
+            this.id = user.uid;
+        } else {
+            this.id = "";
+        }
+        this.checkFav();
         await this.getData("country");
         await this.getStockData();
     },
     watch: {
         stockName: async function () {
+            this.checkFav();
             await this.getData("country");
             await this.getStockData();
+        },
+        $route() {
+            this.checkFav();
         },
     },
 };

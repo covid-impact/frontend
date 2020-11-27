@@ -188,14 +188,12 @@ export default {
             });
         },
         addToFav: function () {
+            const ref = db.collection("users").doc(this.id);
             if (!this.isFav) {
-                const user = firebase.auth().currentUser;
-                console.log(user);
-                const ref = db.collection("users").doc(user.uid);
                 try {
                     ref.update({
                         favorites: firebase.firestore.FieldValue.arrayUnion({
-                            id: user.uid,
+                            id: this.id,
                             type: "country",
                             route: this.$route.name,
                             country: this.country,
@@ -205,6 +203,20 @@ export default {
                     this.isFav = true;
                 } catch (error) {
                     this.isFav = false;
+                }
+            } else {
+                try {
+                    ref.update({
+                        favorites: firebase.firestore.FieldValue.arrayRemove({
+                            id: this.id,
+                            type: "country",
+                            route: this.$route.name,
+                            country: this.country,
+                        }),
+                    });
+                    this.isFav = false;
+                } catch (error) {
+                    this.isFav = true;
                 }
             }
         },
@@ -216,19 +228,21 @@ export default {
                 route: this.$route.name,
                 country: this.country,
             };
-            let favs = await ref
-                .where("favorites", "array-contains", fav)
-                .get();
-            let allFavs = [];
-            for (const doc of favs.docs) {
-                doc.data().keywordsBoth = [];
-                doc.data().keywordsSymbol = [];
-                doc.data().keywordsName = [];
-                allFavs.push(doc.data());
-            }
-            if (allFavs.length === 1) {
-                this.isFav = true;
-            } else {
+            try {
+                let favs = await ref
+                    .where("favorites", "array-contains", fav)
+                    .get();
+                let allFavs = [];
+                console.log(favs.docs[0].data());
+                for (const doc of favs.docs) {
+                    allFavs.push(doc.data());
+                }
+                if (allFavs.length === 1) {
+                    this.isFav = true;
+                } else {
+                    this.isFav = false;
+                }
+            } catch (error) {
                 this.isFav = false;
             }
         },
@@ -326,8 +340,6 @@ export default {
         },
     },
     async mounted() {
-        this.getData("country");
-        this.getConutryData();
         let user = await this.checkAuthStatus();
         if (user) {
             this.id = user.uid;
@@ -335,14 +347,20 @@ export default {
             this.id = "";
         }
         this.checkFav();
+        this.getData("country");
+        this.getConutryData();
     },
     watch: {
         theme: function () {
             this.dataCovid = { ...this.dataCovid };
         },
         country: function () {
+            this.checkFav();
             this.getData("country");
             this.getConutryData();
+        },
+        $route() {
+            this.checkFav();
         },
     },
 };
