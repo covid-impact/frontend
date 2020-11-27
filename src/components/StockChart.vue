@@ -8,7 +8,7 @@
 <script>
 import { Chart } from "highcharts-vue";
 import Highcharts from "highcharts";
-const stockInit = () => import("highcharts/modules/stock");
+import stockInit from "highcharts/modules/stock";
 
 stockInit(Highcharts);
 export default {
