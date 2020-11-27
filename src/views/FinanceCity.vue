@@ -28,7 +28,7 @@
         <div v-if="!loadingCounty && !countyError" class="select--margin--top">
             <Select
                 :data="countyNameList"
-                placeholder="Choose county"
+                placeholder="Choose city"
                 @newSelection="countyNameChange"
             />
         </div>
