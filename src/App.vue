@@ -117,6 +117,36 @@ html[data-theme="light"] {
     --critical: rgb(255, 23, 68);
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #101010;
+        --background-secondary: #212121;
+        --background-card: #000;
+        --text: #fff;
+        --text-menu: #fff;
+        --deaths: rgb(244, 67, 54);
+        --active: rgb(255, 235, 59);
+        --recovered: rgb(118, 255, 3);
+        --cases: #dadada;
+        --critical: rgb(255, 23, 68);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --background: #fff;
+        --background-secondary: #e3f2fd;
+        --background-card: #fff;
+        --text: #000;
+        --text-menu: #000;
+        --deaths: rgb(244, 67, 54);
+        --active: rgb(255, 233, 39);
+        --recovered: rgb(62, 255, 3);
+        --cases: #000;
+        --critical: rgb(255, 23, 68);
+    }
+}
+
 * {
     margin: 0;
     padding: 0;

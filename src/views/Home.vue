@@ -9,9 +9,9 @@
                 @newSelection="countryChange"
                 placeholder="Select some other country"
             /> -->
-            <Loading v-if="loadingFav" />
+            <Loading v-if="loggedIn && loadingFav" />
             <svg
-                v-if="!loadingFav"
+                v-if="loggedIn && !loadingFav"
                 xmlns="http://www.w3.org/2000/svg"
                 class="fav--icon ionicon"
                 viewBox="0 0 512 512"
@@ -158,6 +158,7 @@ export default {
             isFav: false,
             id: "",
             loadingFav: false,
+            loggedIn: false,
         };
     },
     computed: {
@@ -360,8 +361,10 @@ export default {
     async mounted() {
         let user = await this.checkAuthStatus();
         if (user) {
+            this.loggedIn = true;
             this.id = user.uid;
         } else {
+            this.loggedIn = false;
             this.id = "";
         }
         this.checkFav();

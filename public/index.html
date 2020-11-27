@@ -26,7 +26,113 @@
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
-        <title><%= htmlWebpackPlugin.options.title %></title>
+
+        <!-- Primary Meta Tags -->
+        <title>COVID Finance</title>
+        <meta name="title" content="COVID Finance" />
+        <meta
+            name="description"
+            content="Check the impact that COVID has had on the stock market!"
+        />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://stock-cd53e.web.app/" />
+        <meta property="og:title" content="COVID Finance" />
+        <meta
+            property="og:description"
+            content="Check the impact that COVID has had on the stock market!"
+        />
+        <meta
+            property="og:image"
+            content="https://stock-cd53e.web.app/meta.png"
+        />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://stock-cd53e.web.app/" />
+        <meta property="twitter:title" content="COVID Finance" />
+        <meta
+            property="twitter:description"
+            content="Check the impact that COVID has had on the stock market!"
+        />
+        <meta
+            property="twitter:image"
+            content="https://stock-cd53e.web.app/meta.png"
+        />
+
+        <style>
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background: #101010;
+                    color: white;
+                }
+            }
+
+            @media (prefers-color-scheme: light) {
+                body {
+                    background: white;
+                    color: #555;
+                }
+            }
+            #loading-wrapper {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+            }
+
+            #loading-text {
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                color: rgb(20, 121, 60);
+                width: 100px;
+                height: 30px;
+                margin: -7px 0 0 -45px;
+                text-align: center;
+                font-family: "PT Sans Narrow", sans-serif;
+                font-size: 20px;
+            }
+
+            #loading-content {
+                display: block;
+                position: relative;
+                left: 50%;
+                top: 50%;
+                width: 170px;
+                height: 170px;
+                margin: -85px 0 0 -85px;
+                border: 3px solid #f00;
+            }
+
+            #loading-content {
+                border: 3px solid transparent;
+                border-top-color: rgb(121, 61, 185);
+                border-bottom-color: rgb(121, 61, 185);
+                border-radius: 50%;
+                -webkit-animation: loader 2s linear infinite;
+                -moz-animation: loader 2s linear infinite;
+                -o-animation: loader 2s linear infinite;
+                animation: loader 2s linear infinite;
+            }
+
+            @keyframes loader {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                    -ms-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    -ms-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
     </head>
     <body>
         <noscript>
@@ -36,7 +142,14 @@
                 continue.
             </strong>
         </noscript>
-        <div id="app"></div>
+        <div id="app">
+            <div id="loading-wrapper">
+                <div id="loading-text">
+                    <img src="favicon-32x32.png" alt="Logo" />
+                </div>
+                <div id="loading-content"></div>
+            </div>
+        </div>
         <!-- built files will be auto injected -->
     </body>
 </html>

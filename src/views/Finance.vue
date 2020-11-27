@@ -3,9 +3,9 @@
         <h1 class="main--heading">COVID-19 Impact</h1>
         <section class="country">
             <h2 class="heading">{{ stockName.name }} v/s {{ country.name }}</h2>
-            <Loading v-if="loadingFav" />
+            <Loading v-if="loggedIn && loadingFav" />
             <svg
-                v-if="!loadingFav"
+                v-if="loggedIn && !loadingFav"
                 xmlns="http://www.w3.org/2000/svg"
                 class="fav--icon ionicon"
                 viewBox="0 0 512 512"
@@ -124,6 +124,7 @@ export default {
             isFav: false,
             id: "",
             loadingFav: false,
+            loggedIn: false,
         };
     },
     computed: {
@@ -351,8 +352,10 @@ export default {
     mounted: async function () {
         let user = await this.checkAuthStatus();
         if (user) {
+            this.loggedIn = true;
             this.id = user.uid;
         } else {
+            this.loggedIn = false;
             this.id = "";
         }
         this.checkFav();

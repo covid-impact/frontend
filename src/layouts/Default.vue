@@ -10,7 +10,7 @@
                     :href="href"
                     @click="navigate"
                 >
-                    <img src="../assets/CF.png" alt="Covid Finance Logo" />
+                    <img src="../assets/CF.svg" alt="Covid Finance Logo" />
                 </a>
             </router-link>
         </section>
