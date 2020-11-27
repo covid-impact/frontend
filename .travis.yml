@@ -1,5 +1,5 @@
 language: node_js
-node_js: 
+node_js:
   - 9
 cache:
   directories:
@@ -11,3 +11,6 @@ deploy:
   site: NETLIFY_SITE
   auth: NETLIFY_AUTH
   edge: true
+  provider: firebase
+  token:
+    secure: "1/AD7sdasdasdKJA824OvEFc1c89Xz2ilBlaBlaBla"
