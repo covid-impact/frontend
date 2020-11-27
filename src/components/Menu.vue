@@ -17,48 +17,54 @@
             />
         </svg>
         <ul class="menu">
-            <router-link tag="li" class="menu--item" :to="{ name: 'home' }"
+            <router-link tag="li" class="menu--item" name="covidMenu" :to="{ name: 'home' }"
                 >COVID-19
             </router-link>
             <ul class="sub--menu">
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="covidHomeMenu"
                     :to="{ name: 'covidHome' }"
                     >Country</router-link
                 >
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="covidWorldMenu"
                     :to="{ name: 'covidWorld' }"
                     >World</router-link
                 >
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="covidCityMenu"
                     :to="{ name: 'covidCity' }"
                     >City</router-link
                 >
             </ul>
-            <router-link tag="li" class="menu--item" :to="{ name: 'finance' }"
+            <router-link tag="li" class="menu--item" name="financeMenu" :to="{ name: 'finance' }"
                 >Finance</router-link
             >
             <ul class="sub--menu">
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="financeHomeMenu"
                     :to="{ name: 'financeHome' }"
                     >Country</router-link
                 >
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="financeWorldMenu"
                     :to="{ name: 'financeWorld' }"
                     >World</router-link
                 >
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="financeCityMenu"
                     :to="{ name: 'financeCity' }"
                     >City</router-link
                 >
@@ -84,25 +90,28 @@
         </ul>
         <transition name="slide-fade" mode="out-in">
             <ul v-if="showMenu" class="menu menu--mobile">
-                <router-link tag="li" class="menu--item" :to="{ name: 'home' }"
+                <router-link tag="li" class="menu--item" name="covidMenuMobile" :to="{ name: 'home' }"
                     >COVID-19
                 </router-link>
                 <ul class="sub--menu">
                     <router-link
                         tag="li"
                         class="menu--item"
+                        name="covidHomeMenuMobile"
                         :to="{ name: 'covidHome' }"
                         >Country</router-link
                     >
                     <router-link
                         tag="li"
                         class="menu--item"
+                        name="covidWorldMenuMobile"
                         :to="{ name: 'covidWorld' }"
                         >World</router-link
                     >
                     <router-link
                         tag="li"
                         class="menu--item"
+                        name="covidCityMenuMobile"
                         :to="{ name: 'covidCity' }"
                         >City</router-link
                     >
@@ -110,6 +119,7 @@
                 <router-link
                     tag="li"
                     class="menu--item"
+                    name="financeMenuMobile"
                     :to="{ name: 'finance' }"
                     >Finance</router-link
                 >
@@ -117,18 +127,21 @@
                     <router-link
                         tag="li"
                         class="menu--item"
+                        name="financeHomeMenuMobile"
                         :to="{ name: 'financeHome' }"
                         >Country</router-link
                     >
                     <router-link
                         tag="li"
                         class="menu--item"
+                        name="financeWorldMenuMobile"
                         :to="{ name: 'financeWorld' }"
                         >World</router-link
                     >
                     <router-link
                         tag="li"
                         class="menu--item"
+                        name="financeCityMenuMobile"
                         :to="{ name: 'financeCity' }"
                         >City</router-link
                     >
