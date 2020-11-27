@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
@@ -10,12 +9,8 @@ const router = new Router({
         {
             path: "/",
             name: "home",
-            component: Home,
-        },
-        {
-            path: "/",
-            name: "covidHome",
-            component: Home,
+            component: () =>
+                import(/* webpackChunkName: "home" */ "./views/Home.vue"),
         },
         {
             path: "/world",
@@ -36,12 +31,6 @@ const router = new Router({
         {
             path: "/finance",
             name: "finance",
-            component: () =>
-                import(/* webpackChunkName: "finance" */ "./views/Finance.vue"),
-        },
-        {
-            path: "/finance",
-            name: "financeHome",
             component: () =>
                 import(/* webpackChunkName: "finance" */ "./views/Finance.vue"),
         },
@@ -85,11 +74,10 @@ const router = new Router({
             path: "/user",
             name: "user",
             component: () =>
-                import(/* webpackChunkName: "user" */ "./views/User.vue"
-                ),
+                import(/* webpackChunkName: "user" */ "./views/User.vue"),
             meta: {
                 layout: "basic",
-            }
+            },
         },
     ],
 });

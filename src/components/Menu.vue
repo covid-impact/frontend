@@ -21,10 +21,7 @@
                 >COVID-19
             </router-link>
             <ul class="sub--menu">
-                <router-link
-                    tag="li"
-                    class="menu--item"
-                    :to="{ name: 'covidHome' }"
+                <router-link tag="li" class="menu--item" :to="{ name: 'home' }"
                     >Country</router-link
                 >
                 <router-link
@@ -47,7 +44,7 @@
                 <router-link
                     tag="li"
                     class="menu--item"
-                    :to="{ name: 'financeHome' }"
+                    :to="{ name: 'finance' }"
                     >Country</router-link
                 >
                 <router-link
@@ -115,7 +112,7 @@
                     <router-link
                         tag="li"
                         class="menu--item"
-                        :to="{ name: 'covidHome' }"
+                        :to="{ name: 'home' }"
                         >Country</router-link
                     >
                     <router-link
@@ -141,7 +138,7 @@
                     <router-link
                         tag="li"
                         class="menu--item"
-                        :to="{ name: 'financeHome' }"
+                        :to="{ name: 'finance' }"
                         >Country</router-link
                     >
                     <router-link

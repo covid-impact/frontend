@@ -3,7 +3,9 @@
         <h1 class="main--heading">COVID-19 Impact</h1>
         <section class="country">
             <h2 class="heading">{{ stockName.name }} v/s {{ country.name }}</h2>
+            <Loading v-if="loadingFav" />
             <svg
+                v-if="!loadingFav"
                 xmlns="http://www.w3.org/2000/svg"
                 class="fav--icon ionicon"
                 viewBox="0 0 512 512"
@@ -63,6 +65,7 @@ import StockChart from "../components/StockChart";
 import options from "@/assets/chartOptions.js";
 import Select from "../components/Select";
 import countries from "@/assets/countries.js";
+import Loading from "../components/Loading";
 import db from "../main";
 import { firebase } from "@firebase/app";
 import "@firebase/auth";
@@ -75,6 +78,7 @@ export default {
     components: {
         StockChart,
         Select,
+        Loading,
     },
     props: {
         // The theme for the page
@@ -119,6 +123,7 @@ export default {
             stateSelected: null,
             isFav: false,
             id: "",
+            loadingFav: false,
         };
     },
     computed: {
@@ -155,6 +160,7 @@ export default {
             const ref = db.collection("users").doc(this.id);
             if (!this.isFav) {
                 try {
+                    this.loadingFav = true;
                     ref.update({
                         favorites: firebase.firestore.FieldValue.arrayUnion({
                             id: this.id,
@@ -166,11 +172,14 @@ export default {
                     });
 
                     this.isFav = true;
+                    this.loadingFav = false;
                 } catch (error) {
                     this.isFav = false;
+                    this.loadingFav = false;
                 }
             } else {
                 try {
+                    this.loadingFav = true;
                     ref.update({
                         favorites: firebase.firestore.FieldValue.arrayRemove({
                             id: this.id,
@@ -181,8 +190,10 @@ export default {
                         }),
                     });
                     this.isFav = false;
+                    this.loadingFav = false;
                 } catch (error) {
                     this.isFav = true;
+                    this.loadingFav = false;
                 }
             }
         },
@@ -195,13 +206,12 @@ export default {
                 country: this.country,
                 stockName: this.stockName,
             };
-            console.log(fav);
             try {
+                this.loadingFav = true;
                 let favs = await ref
                     .where("favorites", "array-contains", fav)
                     .get();
                 let allFavs = [];
-                console.log(favs.docs[0].data());
                 for (const doc of favs.docs) {
                     allFavs.push(doc.data());
                 }
@@ -210,9 +220,11 @@ export default {
                 } else {
                     this.isFav = false;
                 }
+                this.loadingFav = false;
             } catch (error) {
                 console.log(error);
                 this.isFav = false;
+                this.loadingFav = false;
             }
         },
         /**

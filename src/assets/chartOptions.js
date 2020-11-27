@@ -41,6 +41,10 @@ const options = {
                 },
                 threshold: null,
             },
+            series: {
+                compare: "percent",
+                showInNavigator: true,
+            },
         },
     },
     dark: {
@@ -90,6 +94,10 @@ const options = {
                     },
                 },
                 threshold: null,
+            },
+            series: {
+                compare: "percent",
+                showInNavigator: true,
             },
         },
     },

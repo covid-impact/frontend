@@ -30,7 +30,7 @@
         <Loading v-if="loadingCounty" />
         <h1 v-if="countyError">Error ocuured while getting County</h1>
 
-        <Chart
+        <stock-chart
             v-if="
                 !loadingCounties &&
                 !countiesError &&
@@ -45,16 +45,16 @@
 
 <script>
 import Select from "../components/Select";
-import Chart from "../components/Chart";
 import Loading from "../components/Loading";
 
 import options from "@/assets/chartOptions.js";
+import StockChart from "../components/StockChart.vue";
 
 export default {
     components: {
         Select,
-        Chart,
         Loading,
+        StockChart,
     },
     computed: {
         getData: function () {
@@ -87,7 +87,6 @@ export default {
                 ...this.options,
                 chart: {
                     ...this.options.chart,
-                    height: "50%",
                 },
                 series,
             };

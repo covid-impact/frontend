@@ -10,7 +10,7 @@
                     :href="href"
                     @click="navigate"
                 >
-                    <h1>CF</h1>
+                    <img src="../assets/CF.png" alt="Covid Finance Logo" />
                 </a>
             </router-link>
         </section>
@@ -79,6 +79,11 @@ export default {
     justify-content: flex-start;
     align-items: center;
     background: var(--background-secondary);
+}
+
+.logo img {
+    height: 50px;
+    width: 50px;
 }
 
 .logo--link,

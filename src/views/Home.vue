@@ -9,7 +9,9 @@
                 @newSelection="countryChange"
                 placeholder="Select some other country"
             /> -->
+            <Loading v-if="loadingFav" />
             <svg
+                v-if="!loadingFav"
                 xmlns="http://www.w3.org/2000/svg"
                 class="fav--icon ionicon"
                 viewBox="0 0 512 512"
@@ -155,6 +157,7 @@ export default {
             countryCOVIDData: {},
             isFav: false,
             id: "",
+            loadingFav: false,
         };
     },
     computed: {
@@ -191,32 +194,43 @@ export default {
             const ref = db.collection("users").doc(this.id);
             if (!this.isFav) {
                 try {
+                    this.loadingFav = true;
                     ref.update({
                         favorites: firebase.firestore.FieldValue.arrayUnion({
                             id: this.id,
                             type: "country",
                             route: this.$route.name,
                             country: this.country,
+                            stockName: {
+                                name: "-",
+                            },
                         }),
                     });
-
                     this.isFav = true;
+                    this.loadingFav = false;
                 } catch (error) {
                     this.isFav = false;
+                    this.loadingFav = false;
                 }
             } else {
                 try {
+                    this.loadingFav = true;
                     ref.update({
                         favorites: firebase.firestore.FieldValue.arrayRemove({
                             id: this.id,
                             type: "country",
                             route: this.$route.name,
                             country: this.country,
+                            stockName: {
+                                name: "-",
+                            },
                         }),
                     });
                     this.isFav = false;
+                    this.loadingFav = false;
                 } catch (error) {
                     this.isFav = true;
+                    this.loadingFav = false;
                 }
             }
         },
@@ -227,13 +241,16 @@ export default {
                 type: "country",
                 route: this.$route.name,
                 country: this.country,
+                stockName: {
+                    name: "-",
+                },
             };
             try {
+                this.loadingFav = true;
                 let favs = await ref
                     .where("favorites", "array-contains", fav)
                     .get();
                 let allFavs = [];
-                console.log(favs.docs[0].data());
                 for (const doc of favs.docs) {
                     allFavs.push(doc.data());
                 }
@@ -242,7 +259,10 @@ export default {
                 } else {
                     this.isFav = false;
                 }
+                this.loadingFav = false;
             } catch (error) {
+                console.log(error);
+                this.loadingFav = false;
                 this.isFav = false;
             }
         },
@@ -302,8 +322,6 @@ export default {
 
                 this.dataCovid = { ...this.options, series };
                 this.loadingHistorical = false;
-
-                // console.log(this.dataCovid);
             } catch (error) {
                 console.log(error);
                 this.loadingHistorical = false;
@@ -446,7 +464,7 @@ export default {
 }
 
 .fav--icon--fav {
-    fill: yellow;
+    fill: #ffdf00;
 }
 
 .fav--icon--not--fav {

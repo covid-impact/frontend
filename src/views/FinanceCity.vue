@@ -36,7 +36,7 @@
         <Loading v-if="loadingCounty" />
         <h1 v-if="countyError">Error ocuured while getting County</h1>
 
-        <Chart
+        <stock-chart
             v-if="
                 !loadingCounties &&
                 !countiesError &&
@@ -54,12 +54,10 @@ import Select from "../components/Select";
 import StockChart from "../components/StockChart";
 import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
-import Chart from "../components/Chart";
 
 export default {
     components: {
         Select,
-        Chart,
         StockChart,
         Loading,
     },

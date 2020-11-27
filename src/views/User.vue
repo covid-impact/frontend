@@ -1,16 +1,30 @@
 <template>
     <section class="user">
         <h1 class="main--heading">{{ name }}</h1>
-        <h2 class="heading">User favorites</h2>
-        <ul>
-            <li
-                @click="gotoFav(index)"
-                v-for="(fav, index) in favorites"
-                :key="index"
-            >
-                {{ favorite(fav) }}
-            </li>
-        </ul>
+        <loading v-if="loadingFavs" />
+        <h2 v-if="!loadingFavs" class="heading">User favorites</h2>
+        <table v-if="!loadingFavs" class="user--fav">
+            <thead>
+                <tr class="user--fav--row">
+                    <th class="user--fav--head">Conutry</th>
+                    <th class="user--fav--head">Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    class="user--fav--row"
+                    v-for="(fav, index) in favorites"
+                    :key="index"
+                >
+                    <td @click="gotoFav(index)" class="user--fav--data">
+                        {{ fav.country.name }}
+                    </td>
+                    <td @click="gotoFav(index)" class="user--fav--data">
+                        {{ fav.stockName.name }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 </template>
 
@@ -18,12 +32,15 @@
 import { firebase } from "@firebase/app";
 import "@firebase/auth";
 import db from "../main";
+import Loading from "../components/Loading.vue";
 export default {
+    components: { Loading },
     data() {
         return {
             name: "",
             id: "",
             favorites: [],
+            loadingFavs: false,
         };
     },
     methods: {
@@ -37,10 +54,12 @@ export default {
             });
         },
         getUserData: async function () {
+            this.loadingFavs = true;
             const res = await db.collection("users").doc(this.id).get();
             const data = res.data();
             this.name = data.name;
             this.favorites = [...data.favorites];
+            this.loadingFavs = false;
         },
         favorite: function (fav) {
             if (fav.type === "finance") {
@@ -85,4 +104,25 @@ export default {
 </script>
 
 <style>
+.user {
+    width: 100%;
+}
+
+.user--fav {
+    text-align: left;
+    width: 100%;
+    border: 1px solid var(--text);
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user--fav--data,
+.user--fav--head {
+    border: 1px solid var(--text);
+    padding: 5px;
+}
+
+.user--fav--data {
+    cursor: pointer;
+}
 </style>
