@@ -1,11 +1,12 @@
 language: node_js
 node_js:
-  - 9
+  - 12
 cache:
   directories:
     - node_modules
 script:
     - npm run test:unit
+    - npm run test:module
 deploy:
   - provider: netlify
     site: NETLIFY_SITE
