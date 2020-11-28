@@ -8,7 +8,7 @@
         "test": "npm-run-all test:unit test:module",
         "test:unit": "vue-cli-service test:unit",
         "test:module": "start-server-and-test run-serve http://localhost:5000 module-test",
-        "test:system:accessibility": "jest --config=jest.systemAccessibility.config.js",
+        "test:system:configuration": "jest --config=jest.systemAccessibility.config.js",
         "run-serve": "npm run serve",
         "module-test": "jest --config=jest.module.config.js",
         "lint": "vue-cli-service lint",
