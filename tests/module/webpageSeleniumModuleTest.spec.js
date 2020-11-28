@@ -1,4 +1,5 @@
 const {Builder,By,Key,util} = require("selenium-webdriver");
+const webdriver = require("selenium-webdriver");
 const firefox = require('selenium-webdriver/firefox');
 const options = new firefox.Options();
 
@@ -6,17 +7,9 @@ const localhost = "http://localhost:5000";
 options.setPreference("security.sandbox.content.level", 5);
 //timeout 20s
 jest.setTimeout(20000);
-let driver;
-
-async function example()
-{
-let driver = await new Builder.forBrowser("firefox").build();
-await driver.get("http://google.com");
-await driver.findElement(By.name("q").sendKeys("Selenium",Key.RETURN));
-}
+let driver = new webdriver.Builder().forBrowser("firefox").setFirefoxOptions(options).build();
 
 beforeAll(async () => {
-  driver = await new Builder().forBrowser("firefox").setFirefoxOptions(options).build();
   await driver.get(localhost);
 })
 afterAll(async () => {
