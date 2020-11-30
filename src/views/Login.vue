@@ -7,7 +7,7 @@
                 id="email"
                 type="text"
                 placeholder="Email"
-                v-model="email"
+                v-model.trim="email"
                 class="input"
             />
         </div>
@@ -17,7 +17,7 @@
                 id="password"
                 type="password"
                 placeholder="Password"
-                v-model="password"
+                v-model.trim="password"
                 class="input"
             />
         </div>
