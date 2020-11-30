@@ -4,6 +4,10 @@
 
 You need to install npm to run this project.
 
+> Can be downloaded from https://nodejs.org/en/download/.
+
+After that in the local directory
+
 ```
 npm install
 ```
@@ -14,10 +18,12 @@ npm install
 npm run serve
 ```
 
-### Run Docs
+### Docs
+
+> Need to have serve npm package globally installed
 
 ```
-npm run docs:dev
+serve website
 ```
 
 ### Compiles and minifies for production

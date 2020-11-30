@@ -19,6 +19,7 @@
         ></highcharts>
     </section>
 </template>
+
 <script>
 import Select from "../components/Select";
 import { Chart } from "highcharts-vue";
@@ -29,6 +30,10 @@ import addWorldMap from "@/assets/worldmap";
 mapInit(Highcharts);
 addWorldMap(Highcharts);
 
+// @group Views
+/**
+ * To get the COVID-19 data for the whole world.
+ */
 export default {
     components: {
         Select,
@@ -65,7 +70,7 @@ export default {
                     backgroundColor: "transparent",
                 },
                 title: {
-                    text: "Cases",
+                    text: this.select[this.selectIndex].name,
                     align: "left",
                     style: {
                         fontSize: "4em",
@@ -94,6 +99,10 @@ export default {
         },
     },
     methods: {
+        /**
+         * @vuese
+         * Gets the historical data for the world.
+         */
         getData: async function () {
             this.loading = true;
 
@@ -156,6 +165,11 @@ export default {
 
             this.loading = false;
         },
+        /**
+         * @vuese
+         * Changes the type of data that user wants to view. Options are
+         * Cases, Deaths, Recovered, Critical, Active and Tests.
+         */
         selectionChange: function (selection) {
             this.loading = true;
             this.selection = selection[0];

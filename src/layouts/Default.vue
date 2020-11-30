@@ -33,6 +33,10 @@
 import Search from "../components/Search";
 import Menu from "../components/Menu";
 
+// @group Layouts
+/**
+ * Layout with searchbar
+ */
 export default {
     components: {
         Search,
@@ -45,13 +49,37 @@ export default {
          * @arg theme to switch to
          */
         themeChange: function (theme) {
+            /**
+             * @vuese
+             * fired when switching themes
+             * @arg theme to switch to
+             */
             this.$emit("themeChange", localStorage.getItem("theme"));
         },
+        /**
+         * @vuese
+         * for switching countries
+         * @arg country to switch to
+         */
         countryChange: function (conutry) {
-            console.log("here");
+            /**
+             * @vuese
+             * fired when switching countries
+             * @arg country to switch to
+             */
             this.$emit("countryChange", conutry);
         },
+        /**
+         * @vuese
+         * for switching stock companies
+         * @arg stock company to switch to
+         */
         stockChange: function (stockName) {
+            /**
+             * @vuese
+             * fired when switching stock company
+             * @arg stock company to switch to
+             */
             this.$emit("stockChange", stockName);
         },
     },

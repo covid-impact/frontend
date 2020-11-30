@@ -11,6 +11,10 @@ import Highcharts from "highcharts";
 import stockInit from "highcharts/modules/stock";
 
 stockInit(Highcharts);
+// @group Components
+/**
+ * To show the stock data or better visualised time series.
+ */
 export default {
     components: {
         // LineChart,

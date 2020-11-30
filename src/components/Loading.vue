@@ -16,8 +16,13 @@
 </template>
 
 <script>
+// @group Components
+/**
+ * component to show the loading state
+ */
 export default {
     props: {
+        // if the loading is to be displayed at full height and width.
         full: Boolean,
     },
 };

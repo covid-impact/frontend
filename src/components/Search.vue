@@ -57,6 +57,10 @@ export default {
         },
     },
     methods: {
+        /**
+         * @vuese
+         * formatted data to displayed in the suggestions list
+         */
         li: function (val) {
             if (this.$route.name.includes("finance")) {
                 return `${val.name} | ${val.region} | ${val.exchange}`;
@@ -64,6 +68,10 @@ export default {
                 return val.name;
             }
         },
+        /**
+         * @vuese
+         * to get the suggestions when user enters new characters.
+         */
         inputChange: async function () {
             this.showSuggestion = true;
             this.suggestionItems = [];
@@ -110,6 +118,10 @@ export default {
                 }
             }
         },
+        /**
+         * @vuese
+         * sets the stock data from the suggestions
+         */
         searchStock(index) {
             delete this.topFiveSuggestions[index].keywordsSymbol;
             delete this.topFiveSuggestions[index].keywordsBoth;
@@ -119,23 +131,43 @@ export default {
                     "stockSymbol",
                     JSON.stringify(this.topFiveSuggestions[index])
                 );
+                /**
+                 * Fired when user selects a stock
+                 * @arg an object containig stock info
+                 */
                 this.$emit("stockChange", this.topFiveSuggestions[index]);
                 this.showSuggestion = false;
                 this.searchInput = "";
             }
         },
+        /**
+         * @vuese
+         * sets the country data from the suggestions
+         */
         searchLocation(index) {
             this.setlocalStorageValue(
                 "country",
                 JSON.stringify(this.topFiveSuggestions[index])
             );
+            /**
+             * Fired when user selects a country
+             * @arg an object with name and ISO codes for the country
+             */
             this.$emit("countryChange", this.topFiveSuggestions[index]);
             this.showSuggestion = false;
             this.searchInput = "";
         },
+        /**
+         * @vuese
+         * to store data to local storage
+         */
         setlocalStorageValue(key, value) {
             localStorage.setItem(key, value);
         },
+        /**
+         * @vuese
+         * select top suggestions on button click
+         */
         pressSearchButton() {
             if (this.$route.name.includes("finance")) {
                 this.searchStock(0);
@@ -143,6 +175,10 @@ export default {
                 this.searchLocation(0);
             }
         },
+        /**
+         * @vuese
+         * select suggestions that user clicked
+         */
         searchClick(index) {
             if (this.$route.name.includes("finance")) {
                 this.searchStock(index);
@@ -151,6 +187,10 @@ export default {
                 this.searchLocation(index);
             }
         },
+        /**
+         * @vuese
+         * when searching wait for user input change for 250ms
+         */
         debounce(func, wait, immediate) {
             var timeout;
             return function () {

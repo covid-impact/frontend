@@ -18,6 +18,7 @@ Menu for the page
 |Method|Description|Parameters|
 |---|---|---|
 |menuToggle|Toggles menu. For tablets and mobile only.|-|
+|signOut|to sign out the logged in user|-|
 |themeSwitch|Used to switch the theme of the site. Fires the `themeChange` event.|-|
 
 <!-- @vuese:Menu:methods:end -->

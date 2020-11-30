@@ -55,6 +55,10 @@ import StockChart from "../components/StockChart";
 import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
 
+// @group Views
+/**
+ * To analyse the impact of the COVID-19 citywise
+ */
 export default {
     components: {
         Select,
@@ -64,6 +68,7 @@ export default {
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
+        // Stock for which the data is to fetched.
         stockName: {
             type: Object,
             required: false,
@@ -127,7 +132,17 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Zips two given arrays into a two dimensional array.
+         * @arg array to zip
+         * @arg array to zip
+         */
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
+        /**
+         * @vuese
+         * Gets a list of the counties for which data can be fetched.
+         */
         getCountiesList: async function () {
             try {
                 this.countiesError = false;
@@ -151,6 +166,10 @@ export default {
                 this.countiesError = true;
             }
         },
+        /**
+         * @vuese
+         * Get the data for the selected county. Default is alphabetically.
+         */
         getCountyData: async function () {
             try {
                 this.countyError = false;
@@ -179,6 +198,10 @@ export default {
                 this.countyError = true;
             }
         },
+        /**
+         * @vuese
+         * Get the data for the selected stock.
+         */
         getStockData: async function () {
             try {
                 const responseFinance = await fetch(
@@ -228,10 +251,18 @@ export default {
                 this.historyDataStockError = true;
             }
         },
+        /**
+         * @vuese
+         * Change the state for getting new counties/cities.
+         */
         countyChange: function (county) {
             this.countySelected = county[1];
             this.getCountyData();
         },
+        /**
+         * @vuese
+         * Get the selected county.
+         */
         countyNameChange: function (county) {
             this.countySelected = county[1];
         },

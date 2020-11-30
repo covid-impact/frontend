@@ -129,6 +129,7 @@ export default {
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
+        // The current country that user wants to view
         country: {
             type: Object,
             required: false,
@@ -181,7 +182,17 @@ export default {
         },
     },
     methods: {
+        /**
+         * @vuese
+         * Zips two given arrays into a two dimensional array.
+         * @arg array to zip
+         * @arg array to zip
+         */
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
+        /**
+         * @vuese
+         * Check if the user is logged in.
+         */
         checkAuthStatus: function () {
             return new Promise((resolve, reject) => {
                 try {
@@ -191,6 +202,10 @@ export default {
                 }
             });
         },
+        /**
+         * @vuese
+         * Add the current country to favorites.
+         */
         addToFav: function () {
             const ref = db.collection("users").doc(this.id);
             if (!this.isFav) {
@@ -235,6 +250,10 @@ export default {
                 }
             }
         },
+        /**
+         * @vuese
+         * Checks if the current country is already in favorites.
+         */
         checkFav: async function () {
             const ref = db.collection("users");
             const fav = {

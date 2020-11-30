@@ -1,15 +1,15 @@
-# Chart
+# StockChart
 
-Makes a chart using Chart.js
+To show the stock data or better visualised time series.
 
 ## Props
 
-<!-- @vuese:Chart:props:start -->
+<!-- @vuese:StockChart:props:start -->
 |Name|Description|Type|Required|Default|
 |---|---|---|---|---|
 |title|Title of the chart|`String`|`false`|-|
 |data|Data the chart graphs|`Object`|`true`|-|
 
-<!-- @vuese:Chart:props:end -->
+<!-- @vuese:StockChart:props:end -->
 
 

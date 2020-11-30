@@ -228,6 +228,9 @@ export default {
         menuToggle: function () {
             this.showMenu = !this.showMenu;
         },
+        /**
+         * to check if user is logged in
+         */
         setupFirebase() {
             firebase.auth().onAuthStateChanged((user) => {
                 if (!user) {
@@ -239,6 +242,10 @@ export default {
                 }
             });
         },
+        /**
+         * @vuese
+         * to sign out the logged in user
+         */
         signOut() {
             firebase
                 .auth()

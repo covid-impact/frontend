@@ -7,8 +7,9 @@ The COVID-19 app resides here
 <!-- @vuese:App:methods:start -->
 |Method|Description|Parameters|
 |---|---|---|
-|getCovidData|function  for using covid API(disease.sh) input - location, string, country this.covidData = data from Covid api return dates(dataCovid.labels) for using covid API(disease.sh)|location for COVID data|
 |themeChange|for switching themes|theme to switch to|
+|countryChange|for switching countries|country to switch to|
+|stockChange|for switching stock companies|stock company to switch to|
 
 <!-- @vuese:App:methods:end -->
 

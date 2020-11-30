@@ -33,6 +33,11 @@ import { firebase } from "@firebase/app";
 import "@firebase/auth";
 import db from "../main";
 import Loading from "../components/Loading.vue";
+
+// @group Views
+/**
+ * The profile of the user.
+ */
 export default {
     components: { Loading },
     data() {
@@ -44,6 +49,10 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Check if the user is logged in.
+         */
         checkAuthStatus: function () {
             return new Promise((resolve, reject) => {
                 try {
@@ -53,6 +62,10 @@ export default {
                 }
             });
         },
+        /**
+         * @vuese
+         * Get the data for the logged in user.
+         */
         getUserData: async function () {
             this.loadingFavs = true;
             const res = await db.collection("users").doc(this.id).get();
@@ -61,6 +74,11 @@ export default {
             this.favorites = [...data.favorites];
             this.loadingFavs = false;
         },
+        /**
+         * @vuese
+         * Data to display based on type of favorite
+         * @arg the favorited item
+         */
         favorite: function (fav) {
             if (fav.type === "finance") {
                 return `${fav.country.name} | ${fav.stockName.name}`;
@@ -72,6 +90,11 @@ export default {
 
             return "";
         },
+        /**
+         * @vuese
+         * Redirection to the favorite that user has clicked
+         * @arg index if the favorited item that user clicked
+         */
         gotoFav: function (index) {
             const data = this.favorites[index];
             if (data.type === "finance") {

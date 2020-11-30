@@ -54,14 +54,17 @@
  */
 export default {
     props: {
+        // placeholder to show
         placeholder: {
             type: String,
             required: true,
         },
+        // data from which to be selected
         data: {
             type: Array,
             required: true,
         },
+        // default selected data
         default: {
             type: Object,
             required: false,

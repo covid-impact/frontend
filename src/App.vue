@@ -72,10 +72,20 @@ export default {
         themeChange: function (theme) {
             this.theme = theme;
         },
+        /**
+         * @vuese
+         * for switching countries
+         * @arg country to switch to
+         */
         countryChange: function (country) {
             console.log(country);
             this.country = country;
         },
+        /**
+         * @vuese
+         * for switching stock companies
+         * @arg stock company to switch to
+         */
         stockChange: function (stockName) {
             this.stockName = stockName;
         },

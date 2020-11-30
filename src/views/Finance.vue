@@ -83,6 +83,7 @@ export default {
     props: {
         // The theme for the page
         theme: { type: String, required: false, default: "light" },
+        // Stock for which the data is to fetched.
         stockName: {
             type: Object,
             required: false,
@@ -147,7 +148,17 @@ export default {
         },
     },
     methods: {
+        /**
+         * @vuese
+         * Zips two given arrays into a two dimensional array.
+         * @arg array to zip
+         * @arg array to zip
+         */
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
+        /**
+         * @vuese
+         * Check if the user is logged in.
+         */
         checkAuthStatus: function () {
             return new Promise((resolve, reject) => {
                 try {
@@ -157,6 +168,10 @@ export default {
                 }
             });
         },
+        /**
+         * @vuese
+         * Add the current country and stock to favorites.
+         */
         addToFav: function () {
             const ref = db.collection("users").doc(this.id);
             if (!this.isFav) {
@@ -198,6 +213,10 @@ export default {
                 }
             }
         },
+        /**
+         * @vuese
+         * Checks if the current country and stock is already in favorites.
+         */
         checkFav: async function () {
             const ref = db.collection("users");
             const fav = {
@@ -230,7 +249,7 @@ export default {
         },
         /**
          * @vuese
-         * get the COVID-19 and stock market data
+         * get the COVID-19
          */
         getData: async function (type) {
             try {
@@ -287,7 +306,10 @@ export default {
                 this.historyDataCovidError = true;
             }
         },
-        getStockData: async function () {
+        /**
+         * @vuese
+         * get the stock data.
+         */ getStockData: async function () {
             try {
                 const responseFinance = await fetch(
                     `https://sandbox.iexapis.com/stable/stock/${this.stockName.symbol}/chart/1y?token=Tsk_78ffb2c08b1443a98a73f83fd7ae5e3b`
@@ -337,10 +359,18 @@ export default {
                 this.historyDataStockError = true;
             }
         },
+        /**
+         * @vuese
+         * If supported for a country, change the province to get data for it.
+         */
         provinceChange: function (country) {
             this.stateSelected = country[1];
             this.getData("province");
         },
+        /**
+         * @vuese
+         * Change the country for which data is to be shown
+         */
         countryChange: function (country) {
             this.country = country[0];
             this.countryIndex = country[1];

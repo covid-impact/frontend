@@ -18,6 +18,6 @@ A web app to analyse the imapct of COVID on the stock market
 | UWindsor ID | Member                  | Email                |
 | ----------- | ----------------------- | -------------------- |
 | 110026126   | Prabhjyot Singh Dhillon | dhillo91@uwindsor.ca |
-| 110041455   | Frederick Ho            | verma11@uwindsor.ca  |
+| 110041455   | Frederick Ho            | hochong@uwindsor.ca  |
 | 110057390   | Harry Bhagat            | bhagath@uwindsor.ca  |
-| 103840152   | Sahil Verma             | hochong@uwindsor.ca  |
+| 103840152   | Sahil Verma             | verma11@uwindsor.ca  |

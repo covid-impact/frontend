@@ -28,6 +28,11 @@
 <script>
 import { firebase } from "@firebase/app";
 import "@firebase/auth";
+
+// @group Views
+/**
+ * Login page for the user
+ */
 export default {
     data() {
         return {
@@ -37,12 +42,15 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Tries to log the user in using the signInWithEmailAndPassword firebase method on auth.
+         */
         pressed() {
             firebase
                 .auth()
                 .signInWithEmailAndPassword(this.email, this.password)
                 .then((data) => {
-                    alert("Successful Login");
                     this.$router.replace({ name: "home" });
                 })
                 .catch((error) => {

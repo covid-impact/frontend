@@ -50,6 +50,10 @@ import Loading from "../components/Loading";
 import options from "@/assets/chartOptions.js";
 import StockChart from "../components/StockChart.vue";
 
+// @group Views
+/**
+ * To get the COVID-19 data citywise
+ */
 export default {
     components: {
         Select,
@@ -106,7 +110,17 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Zips two given arrays into a two dimensional array.
+         * @arg array to zip
+         * @arg array to zip
+         */
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
+        /**
+         * @vuese
+         * Gets a list of the counties for which data can be fetched.
+         */
         getCountiesList: async function () {
             try {
                 this.countiesError = false;
@@ -130,6 +144,10 @@ export default {
                 this.countiesError = true;
             }
         },
+        /**
+         * @vuese
+         * Get the data for the selected county. Default is alphabetically.
+         */
         getCountyData: async function () {
             try {
                 this.countyError = false;
@@ -158,10 +176,18 @@ export default {
                 this.countyError = true;
             }
         },
+        /**
+         * @vuese
+         * Change the state for getting new counties/cities.
+         */
         countyChange: function (county) {
             this.countySelected = county[1];
             this.getCountyData();
         },
+        /**
+         * @vuese
+         * Get the selected county.
+         */
         countyNameChange: function (county) {
             this.countySelected = county[1];
         },

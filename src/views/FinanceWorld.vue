@@ -22,6 +22,10 @@
 import StockChart from "../components/StockChart";
 import options from "@/assets/chartOptions.js";
 
+// @group Views
+/**
+ * To analyse impact of COVID-19 on stock market
+ */
 export default {
     components: {
         StockChart,
@@ -60,6 +64,12 @@ export default {
         };
     },
     methods: {
+        /**
+         * @vuese
+         * Zips two given arrays into a two dimensional array.
+         * @arg array to zip
+         * @arg array to zip
+         */
         zip: (a, b) => a.map((k, i) => [Date.parse(b[i]), k]),
         /**
          * @vuese

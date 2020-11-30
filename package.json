@@ -1,70 +1,68 @@
 {
-  "name": "covidf",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve --port 5000",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "build:report": "vue-cli-service build --report",
-    "docs:build": "vuepress build docs",
-    "docs:dev": "vuepress dev docs"
-  },
-  "dependencies": {
-    "highcharts": "^8.2.2",
-    "highcharts-vue": "^1.3.5",
-    "vue": "^2.6.11",
-    "vue-router": "^3.4.8"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-unit-jest": "^4.5.8",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/test-utils": "^1.0.3",
-    "babel": "^6.23.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "firebase": "^8.1.1",
-    "prerender-spa-plugin": "^3.2.1",
-    "vue-template-compiler": "^2.6.11",
-    "vuese": "^1.4.7"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "covidf",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve --port 5000",
+        "build": "vue-cli-service build",
+        "test:unit": "vue-cli-service test:unit",
+        "lint": "vue-cli-service lint",
+        "build:report": "vue-cli-service build --report"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "dependencies": {
+        "highcharts": "^8.2.2",
+        "highcharts-vue": "^1.3.5",
+        "vue": "^2.6.11",
+        "vue-router": "^3.4.8"
     },
-    "rules": {
-      "no-unused-vars": "off"
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-plugin-unit-jest": "^4.5.8",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/test-utils": "^1.0.3",
+        "babel": "^6.23.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^6.2.2",
+        "firebase": "^8.1.1",
+        "prerender-spa-plugin": "^3.2.1",
+        "vue-template-compiler": "^2.6.11",
+        "vuese": "^1.4.7"
     },
-    "overrides": [
-      {
-        "files": [
-          "**/__tests__/*.{j,t}s?(x)",
-          "**/tests/unit/**/*.spec.{j,t}s?(x)"
-        ],
+    "eslintConfig": {
+        "root": true,
         "env": {
-          "jest": true
-        }
-      }
-    ]
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "vuese": {
-    "title": "COVID Finance"
-  }
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {
+            "no-unused-vars": "off"
+        },
+        "overrides": [
+            {
+                "files": [
+                    "**/__tests__/*.{j,t}s?(x)",
+                    "**/tests/unit/**/*.spec.{j,t}s?(x)"
+                ],
+                "env": {
+                    "jest": true
+                }
+            }
+        ]
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ],
+    "vuese": {
+        "title": "COVID Finance"
+    }
 }
