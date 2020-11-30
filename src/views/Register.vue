@@ -1,5 +1,5 @@
 <template>
-    <form class="form" @submit.prevent="pressed">
+    <form class="form" @submit.prevent="checkForm">
         <h1 class="main--heading">Register</h1>
         <div class="form--element">
             <label class="label" for="email">Email</label>
@@ -8,7 +8,7 @@
                 id="email"
                 type="text"
                 placeholder="Email"
-                v-model="email"
+                v-model.trim="email"
             />
         </div>
         <div class="form--element">
@@ -17,7 +17,7 @@
                 class="input"
                 id="password"
                 type="password"
-                v-model="password"
+                v-model.trim="password"
                 placeholder="Password"
             />
         </div>
@@ -27,7 +27,7 @@
                 id="name"
                 type="text"
                 placeholder="Full Name"
-                v-model="name"
+                v-model.trim="name"
                 class="input"
             />
         </div>
@@ -63,9 +63,16 @@ export default {
                     this.$router.replace({ name: "home" });
                 })
                 .catch((error) => {
-                    this.error = error.message;
+                    alert(error);
                 });
         },
+        checkForm() {
+            if(!(/^[a-zA-Z]+$/.test(this.name)) || this.name.length <= 1){
+                alert("Account not created - please re-check all fields.");
+            } else {
+                this.pressed();
+            }   
+        }
     },
 };
 </script>
