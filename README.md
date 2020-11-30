@@ -1,6 +1,5 @@
 # COVID - Finance
 
-[![Build Status](https://travis-ci.org/covid-impact/frontend.svg?branch=main)](https://travis-ci.org/covid-impact/frontend)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/46efc1af-f034-46ad-a0c2-e592996e431e/deploy-status)](https://app.netlify.com/sites/covidf/deploys)
 
 ## [Demo](https://covidf.netlify.app/)
