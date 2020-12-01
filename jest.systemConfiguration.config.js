@@ -1,6 +1,6 @@
 module.exports = {
     preset: "@vue/cli-plugin-unit-jest",
     testMatch: [
-      "**/tests/accessibility/*.spec.js"
+      "**/tests/configuration/*.spec.js"
     ],
 };
