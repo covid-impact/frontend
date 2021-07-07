@@ -21,6 +21,6 @@
 
 ## Documentation
 
--   ### [Frontend](https://covid-finance-docs.netlify.app/#/ "COVID-19 Finace frontend Docs")
+-   ### [Frontend](https://covidf-docs.netlify.app/#/ "COVID-19 Finace frontend Docs")
 
--   ### [Getting Started](https://covid-finance-docs.netlify.app/#/getting-started "Getting Started with frontend")
+-   ### [Getting Started](https://covidf-docs.netlify.app/#/getting-started "Getting Started with frontend")
